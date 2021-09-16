@@ -14,13 +14,7 @@ class Moderation(commands.Cog):
 	
 	@commands.Cog.listener()
 	async def on_message(self, message):
-		
-		msg_content = message.content.lower().replace(' ','').replace('$','s').replace('1', 'i').replace('!', 'i').replace('#','h').replace('7','t').replace('@','a').replace('0','o').replace('9','g').replace('4','a').replace('8','h').replace('¦','i')
-		badWord = ['fuck','shit','dumbass','dick','penis','tities','motherfuck','stfu','bitch','asshole','cock','bollocks','nigga','mothafuck','fack','fak','niger','nigger','niga','titties','titie','tittie','pussy','pusy','mothefuck','motharfuck','retard','tard','cunt','nigge','nige']
-		
-		if any(word in msg_content for word in badWord):
-			await message.delete()
-		
+
 		for file in message.attachments:
 			if file.filename.endswith(('.exe','.apk','.zip','.rar','.7z','.tar.gz','.vb','.scr')):
 				await message.delete()
@@ -105,7 +99,7 @@ class UpdateLog(commands.Cog):
 	@commands.command(aliases=['updatelogall'])
 	async def updatelog(self, ctx):
 			
-		await ctx.reply('1.0.0= This first release comes with 7 commands. Commands can be found by typing :help\n\n1.1.0 = This updates comes with 3 new commands and :latityintro command patch, it was not working due to typing error. New commands can be found by typing :help\n\n1.1.1 = Added forbidden command\n\n1.1.2 = Minor optimization for forbidden command\n\n1.2.0 = Added 3 new commands and deleted some unnecessary junk. New commands can be found by typing :help\n\n1.3.0 = Added 1 forbidden command and 2 new command. This update also comes with reply system, so now bot can reply in order to eliminate any confusion. New commands can be found by typing :help\n\n1.3.1 = Added a simple error handling of "No command found", major optimization for forbidden command, and patches for some commands\n\n1.4.0 = Code is now written in discord.py rewrite branch, so the bot have full coverage of the Discord API, added error handling for some command and 3 new commands. Commands can be found by typing :help\n\n1.5.0 = Added 3 new command, swear word filter, and attachments filter. Commands can be found by typing :help\n\n1.6.0 = Code is now using "cog", so everytime there is a bug, the dev doesnt need to turn off the bot :). Added 1 new commands, which is role giver. Added patch for some commands. Improved swear word filter. New commands can be found by typing :help', mention_author=True)
+		await ctx.reply('1.0.0= This first release comes with 7 commands. Commands can be found by typing :help\n\n1.1.0 = This updates comes with 3 new commands and :latityintro command patch, it was not working due to typing error. New commands can be found by typing :help\n\n1.1.1 = Added forbidden command\n\n1.1.2 = Minor optimization for forbidden command\n\n1.2.0 = Added 3 new commands and deleted some unnecessary junk. New commands can be found by typing :help\n\n1.3.0 = Added 1 forbidden command and 2 new command. This update also comes with reply system, so now bot can reply in order to eliminate any confusion. New commands can be found by typing :help\n\n1.3.1 = Added a simple error handling of "No command found", major optimization for forbidden command, and patches for some commands\n\n1.4.0 = Code is now written in discord.py rewrite branch, so the bot have full coverage of the Discord API, added error handling for some command and 3 new commands. Commands can be found by typing :help\n\n1.5.0 = Added 3 new command and attachments filter. Commands can be found by typing :help\n\n1.6.0 = Code is now using "cog", so everytime there is a bug, the dev doesnt need to turn off the bot :). Added 1 new commands, which is role giver. Added patch for some commands. New commands can be found by typing :help\n\n1.7.0 = Added 3 new commands and minor optimization for a forbidden command. Type :help for new commands', mention_author=True)
 
 class ServerStatus(commands.Cog):
 	
@@ -177,8 +171,7 @@ class ForbiddenCommands(commands.Cog):
 	@commands.command(hidden=True, aliases=['73&rhd8djdiieiedn'])
 	async def ForbiddenCommand1(self, ctx):
 	
-		loopStuff = 0
-		while loopStuff < 5:
+		for x in range(5):
 			loopStuff += 1
 			await ctx.author.send('im watching you')
 			await asyncio.sleep(1)
@@ -303,11 +296,13 @@ class amogus(commands.Cog):
 		
 		await ctx.send(embed = picEmbed)
 		
-		if user == None:
+	@commands.command()
+	async def mypfp(self, ctx):
 		
-			picEmbed.set_image(url = ctx.author.avatar_url)
+		picEmbed = discord.Embed(title = '', description = '', color = discord.Color.blue())
+		picEmbed.set_image(url = ctx.author.avatar_url)
 		
-			await ctx.send(embed = picEmbed)
+		await ctx.send(embed = picEmbed)
 
 class ProbablyUseful(commands.Cog):
 	
@@ -322,7 +317,19 @@ class ProbablyUseful(commands.Cog):
 		realPassword = ''.join(secrets.choice(letterList) for i in range(passLength))
 		
 		await ctx.author.send(f'Here is your password: {realPassword}')
+
+class WhaleFacts(commands.Cog):
 	
+	def __init__(self, bot):
+		self.bot = bot
+		
+	@commands.command()
+	async def aboutwhale(self, ctx):
+		
+		whaleFacts = ["Like all other mammals, whales need to get rid of the waste water they produce. About 166 gallons of urine is excreted by a sei whale in one day. A fin whale's daily production of urine amounts to 257 gallons.", 'Beluga whales have flexible necks, allowing them to move their heads. Their complex communication repertoire of whistles, clicks, and chirps has prompted the nickname "canaries of the sea".', 'Whales are descended from the Artiodactyl species of dinosaurs, which were land livers.', 'Gray whales make one of the longest annual migrations of any mammal: they travel about 10,000 miles (16,000 km) round trip!', "Located in their massive heads, a sperm whale's brain can weigh up to 9kg. That's about as heavy as a Dachshund. Not only that, but the rest of the head which makes up about a third of their body is basically a giant container of oil. It's this oil that made sperm whales so popular for hunting in the last couple of centuries. You could park a car inside of the chamber filled with oils in their skull. Half this high-value oil is actually called 'junk'.", "**Killer whales eat moose**\nNo, they don't jump up onto land and attack the moose. However, orcas have been known to attack moose that are swimming between coastal islands off the northwestern coast of North America. However, this fact is misleading. It's not because it's false, but it's because orcas aren't actually whales, they're dolphins.","WHALES ARE DIVIDED INTO TWO MAIN GROUPS\nThe baleen whales and the toothed whales. Baleen whales have fibrous 'baleen' plates in their mouths instead of teeth which help them filter out huge quantities of krill, plankton, and crustaceans. Toothed whales have teeth which enable them to feed on larger prey such as fish and squid.", 'Whale "vomit" is used in perfumes.', 'HUMPBACK WHALES DON’T EAT FOR MOST OF THE YEAR\nHumpback whales in the Southern Hemisphere live off their fat reserves for 5.5-7.5 months each year, as they migrate from their tropical breeding grounds to the Antarctic, to feed on krill.​', 'ALL TOOTHED WHALES HAVE A "MELON" IN THEIR FOREHEADS\nIts a mass of tissue which focuses the whales calls, vital for communication and echolocation.​ Like bats, they use this echolocation to "see".', "SOME WHALES BUBBLE NET FEED\nThis involves whales cooperatively blowing bubbles that encircle their prey. As the prey won't cross through the bubbles, they're trapped, making it easy for the whales to eat them.", 'THE NAME "NARWHAL" COMES FROM OLD NORSE\nIt means "corpse whale" as their skin colour resembles that of a drowned sailor.', "Whales are World-Class Divers\nMany whale species are able to dive to exceptional depths for exceedingly long durations, but none more so than that Cuvier's beaked whale, which can dive to depths as deep as 3km and stay there for over 2 hours. They eat a great deal of squid, so diving this deep is necessary in order to catch them.", "Whales are never fully asleep\nWhen whales sleep, they don't fully rest their brains like we humans do. Instead, when they sleep they only rest one half of their brain. The other half remains active in order to maintain their breathing, otherwise they would drown!", 'This whale fact is brought to you by Spesta. I Have no idea if it is true, it probably isnt (it isnt) but idc.\nHere it is: A whale cock weighs over 10 kilos']
+		
+		await ctx.send(f'{random.choice(whaleFacts)}\nCredit: fat boat#9172')
+
 def setup(bot):
 	bot.add_cog(SayHello(bot))
 	bot.add_cog(Moderation(bot))
@@ -335,3 +342,4 @@ def setup(bot):
 	bot.add_cog(GiveFood(bot))
 	bot.add_cog(VidandGif(bot))
 	bot.add_cog(stuff(bot))
+	bot.add_cog(WhaleFacts(bot))
