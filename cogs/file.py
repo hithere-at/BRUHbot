@@ -122,7 +122,7 @@ class ServerStatus(commands.Cog):
 	
 		cpuUsage, cpuFrequency, memoryUsed, totalCPUCores = round(psutil.cpu_percent(0.1) / 10), round(psutil.cpu_freq().current), round(psutil.virtual_memory().used / 1000000), os.cpu_count()
 	
-		await ctx.reply(f'Total CPU cores: {totalCPUCores} cores\nCPU usage: {cpuUsage}%\nCurrent CPU frequency: {cpuFrequency}MHz\nMemory used: {memoryUsed}MB\n')
+		await ctx.reply(f'Total CPU cores: {totalCPUCores} cores\nCPU usage: {cpuUsage}%\nCurrent CPU frequency: {cpuFrequency}MHz\nMemory used: {memoryUsed}MB')
 	
 class VidandGif(commands.Cog):
 	
@@ -294,6 +294,20 @@ class amogus(commands.Cog):
 	async def kill(self, ctx):
 	
 		await ctx.reply('https://tenor.com/view/among-us-kill-gif-19295404')			
+
+	@commands.command()
+	async def pfp(self, ctx, user: discord.Member):
+		
+		picEmbed = discord.Embed(title = '', description = '', color = discord.Color.blue())
+		picEmbed.set_image(url = user.avatar_url)
+		
+		await ctx.send(embed = picEmbed)
+		
+		if user == None:
+		
+			picEmbed.set_image(url = ctx.author.avatar_url)
+		
+			await ctx.send(embed = picEmbed)
 
 class ProbablyUseful(commands.Cog):
 	
