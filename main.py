@@ -32,7 +32,7 @@ async def close(ctx, files):
 
 @bot.command(hidden=True)
 @commands.check(bestPeople)
-async def reopen(ctx, files):
+async def reload(ctx, files):
 	
 	bot.reload_extension(f'cogs.{files}')
 
