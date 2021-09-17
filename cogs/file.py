@@ -240,7 +240,7 @@ class RNGstuff(commands.Cog):
 	
 		luckResponse = ['Your luck is bad, very bad. Ask blessing from the lord or something idk','Your luck is normal, nothing special','Your luck is very good. i think you will get good score in your test, hopefully...']
 	
-		await ctx.send(f'{ctx.author.mention} {random.choice(luckResponse)})
+		await ctx.send(f'{ctx.author.mention} {random.choice(luckResponse)}')
 
 class stuff(commands.Cog):
 	
