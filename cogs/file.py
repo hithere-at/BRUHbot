@@ -250,7 +250,7 @@ class stuff(commands.Cog):
 	@commands.command()
 	async def ask(self, ctx, *, question):
 	
-		questionResponse = ['very yes','wth no','idk']
+		questionResponse = ['yes','wth no','idk']
 	
 		await ctx.reply(f'Q: {question}\nA: {random.choice(questionResponse)}', mention_author=True)
 	
