@@ -2,7 +2,7 @@ import discord
 import os
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix = ':', status = discord.Status.online, activity = discord.Activity(type = discord.ActivityType.listening, name = 'my commands ":"'))
+bot = commands.Bot(command_prefix = '%', status = discord.Status.online, activity = discord.Activity(type = discord.ActivityType.listening, name = 'my commands "%"'))
 
 def bestPeople(ctx):
 	return ctx.author.id == 812570189182533642
@@ -16,7 +16,7 @@ async def on_ready():
 async def on_command_error(ctx, error):
 		
 	if isinstance(error, commands.CommandNotFound):
-		await ctx.reply('Bro. wth are you trying to type ?', mention_author=True)
+		await ctx.reply('Bro. wth are you trying to type ? Also the prefix is "%"', mention_author=True)
 
 @bot.command(hidden=True)
 @commands.check(bestPeople)
@@ -53,4 +53,4 @@ async def changestatus(ctx, botStatus, *, reason):
 	if botStatus == 'dnd':
 		await bot.change_presence(status = discord.Status.dnd, activity = discord.Activity(type = discord.ActivityType.listening, name = f'{reason}'))
 
-bot.run('NzQ1Mjk0ODYwODM5NDIwMDM0.Xzvr7Q.YDgBpbbg85mMCGutU9-6q1QV-os')
+bot.run('ODgwMjUxMjYyODkxODgwNTAw.YSbj3w.qpQW_5LGoi5Ho2m15brLEXgYy1g')
