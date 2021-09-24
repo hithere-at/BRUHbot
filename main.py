@@ -53,4 +53,4 @@ async def changestatus(ctx, botStatus, *, reason):
 	if botStatus == 'dnd':
 		await bot.change_presence(status = discord.Status.dnd, activity = discord.Activity(type = discord.ActivityType.listening, name = f'{reason}'))
 
-bot.run('ODgwMjUxMjYyODkxODgwNTAw.YSbj3w.qpQW_5LGoi5Ho2m15brLEXgYy1g')
+bot.run('NzQ1Mjk0ODYwODM5NDIwMDM0.Xzvr7Q.YDgBpbbg85mMCGutU9-6q1QV-os')
