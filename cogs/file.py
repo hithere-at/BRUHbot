@@ -19,7 +19,7 @@ class Moderation(commands.Cog):
 			if file.filename.endswith(('.exe','.apk','.zip','.rar','.7z','.tar.gz','.vb','.scr')):
 				await message.delete()
 	
-	@commands.command()
+	@commands.command(description = 'Give yourself a role')
 	async def selfrole(self, ctx, roleName):
 	
 		user = ctx.author
@@ -99,19 +99,19 @@ class UpdateLog(commands.Cog):
 	@commands.command(aliases=['updatelogall'])
 	async def updatelog(self, ctx):
 			
-		await ctx.reply('1.0.0= This first release comes with 7 commands. Commands can be found by typing :help\n\n1.1.0 = This updates comes with 3 new commands and :latityintro command patch, it was not working due to typing error. New commands can be found by typing :help\n\n1.1.1 = Added forbidden command\n\n1.1.2 = Minor optimization for forbidden command\n\n1.2.0 = Added 3 new commands and deleted some unnecessary junk. New commands can be found by typing :help\n\n1.3.0 = Added 1 forbidden command and 2 new command. This update also comes with reply system, so now bot can reply in order to eliminate any confusion. New commands can be found by typing :help\n\n1.3.1 = Added a simple error handling of "No command found", major optimization for forbidden command, and patches for some commands\n\n1.4.0 = Code is now written in discord.py rewrite branch, so the bot have full coverage of the Discord API, added error handling for some command and 3 new commands. Commands can be found by typing :help\n\n1.5.0 = Added 3 new command and attachments filter. Commands can be found by typing :help\n\n1.6.0 = Code is now using "cog", so everytime there is a bug, the dev doesnt need to turn off the bot :). Added 1 new commands, which is role giver. Added patch for some commands. New commands can be found by typing :help\n\n1.7.0 = Added 3 new commands and minor optimization for a forbidden command. Type :help for new commands', mention_author=True)
+		await ctx.reply('1.0.0= This first release comes with 7 commands. Commands can be found by typing %help\n\n1.1.0 = This updates comes with 3 new commands and :latityintro command patch, it was not working due to typing error. New commands can be found by typing :help\n\n1.1.1 = Added forbidden command\n\n1.1.2 = Minor optimization for forbidden command\n\n1.2.0 = Added 3 new commands and deleted some unnecessary junk. New commands can be found by typing %help\n\n1.3.0 = Added 1 forbidden command and 2 new command. This update also comes with reply system, so now bot can reply in order to eliminate any confusion. New commands can be found by typing %help\n\n1.3.1 = Added a simple error handling of "No command found", major optimization for forbidden command, and patches for some commands\n\n1.4.0 = Code is now written in discord.py rewrite branch, so the bot have full coverage of the Discord API, added error handling for some command and 3 new commands. Commands can be found by typing %help\n\n1.5.0 = Added 3 new command and attachments filter. Commands can be found by typing %help\n\n1.6.0 = Code is now using "cog", so everytime there is a bug, the dev doesnt need to turn off the bot :). Added 1 new commands, which is role giver. Added patch for some commands. New commands can be found by typing %help\n\n1.7.0 = Added 3 new commands and minor optimization for a forbidden command. Type %help for new commands\n\n1.8.0 = Added simple encryptions and decryptions. For now, it only have 2 types of encryption and decryption, which is "Pig Latin" and my own. Some commands also receive command description so you in order to know what does it do. %spicypic commands is now working properly. Type %help to see encrypt/decrypt commands', mention_author=True)
 
 class ServerStatus(commands.Cog):
 	
 	def __init__(self, bot):
 		self.bot = bot
 	
-	@commands.command()		
+	@commands.command(description = 'Show bot response time')		
 	async def latency(self, ctx):
 		
 		await ctx.send(f'{round(self.bot.latency * 1000)}ms')
 		
-	@commands.command()
+	@commands.command(description = 'This is just a random command that i decided to put it here. It have no use')
 	async def stats(self, ctx):
 	
 		cpuUsage, cpuFrequency, memoryUsed, totalCPUCores = round(psutil.cpu_percent(0.1) / 10), round(psutil.cpu_freq().current), round(psutil.virtual_memory().used / 1000000), os.cpu_count()
@@ -195,7 +195,7 @@ class GiveFood(commands.Cog):
 			await ctx.reply(f'Here you go :{food}:', mention_author=True)
 		
 		else:
-			await ctx.reply('no such food found', mention_author=True)
+			await ctx.reply('No such food found', mention_author=True)
 	
 	@givefood.error
 	async def on_command_error(self, ctx, error):
@@ -225,7 +225,7 @@ class RNGstuff(commands.Cog):
 	@commands.command(aliases=['levelrate'])
 	async def GDlevelrate(self, ctx, levelID):
 	
-		rateResponse = ['✩0: Does your level even exist ?','★1 (Auto): You like to make auto level ? weird... but ok','★2 (Easy): I bet its your first time making this level','★3 (Normal): You probably like to play HOW ny spu7nix','★4 (Hard): I hope your level get featured mate','★5 (Hard): You like to make a level that make people grinding stars an easy life','★6 (Harder): To the person who like to make this kind of level, i like you. you make my grind less painful',"★7 (Harder): Your level is kinda hard, y'know ?",'★8 (Insane): You have annoying gameplay, i swear...','★9 (Insane): Your level is basically failed demon','★10 (Demon): Hope you make it to the weekly demon :)']
+		rateResponse = ['✩0: Does your level even exist ?','★1 (Auto): You like to make auto level ? weird... but ok','★2 (Easy): I bet its your first time making this level','★3 (Normal): You probably like to play HOW by spu7nix','★4 (Hard): I hope your level get featured mate','★5 (Hard): You like to make a level that make people grinding stars an easy life','★6 (Harder): To the person who like to make this kind of level, i like you. you make my grind less painful',"★7 (Harder): Your level is kinda hard, y'know ?",'★8 (Insane): You have annoying gameplay, i swear...','★9 (Insane): Your level is basically failed demon','★10 (Demon): Hope you make it to the weekly demon :)']
 	
 		await ctx.reply(f'ID = {levelID}\n\n{random.choice(rateResponse)}', mention_author=True)
 	
@@ -233,14 +233,14 @@ class RNGstuff(commands.Cog):
 	async def on_command_error(self, ctx, error):
 	
 		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.reply('where is the level ?', mention_author=True)
+			await ctx.reply('Where is the level ?', mention_author=True)
 	
 	@commands.command()
 	async def luckcheck(self, ctx):
 	
 		luckResponse = ['Your luck is bad, very bad. Ask blessing from the lord or something idk','Your luck is normal, nothing special','Your luck is very good. i think you will get good score in your test, hopefully...']
 	
-		await ctx.send(f'{ctx.author.mention} {random.choice(luckResponse)}')
+		await ctx.send(ctx.author.mention, random.choice(luckResponse))
 
 class stuff(commands.Cog):
 	
@@ -250,7 +250,7 @@ class stuff(commands.Cog):
 	@commands.command()
 	async def ask(self, ctx, *, question):
 	
-		questionResponse = ['yes','wth no','idk']
+		questionResponse = ['very yes','wth no','idk']
 	
 		await ctx.reply(f'Q: {question}\nA: {random.choice(questionResponse)}', mention_author=True)
 	
@@ -258,7 +258,7 @@ class stuff(commands.Cog):
 	async def on_command_error(ctx, error):
 	
 		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.reply('where is the question ?', mention_author=True)
+			await ctx.reply('Where is the question ?', mention_author=True)
 
 	@commands.command()
 	async def outofcontext(self, ctx):
@@ -271,7 +271,7 @@ class stuff(commands.Cog):
 	@commands.command()
 	async def spicypic(self, ctx):
 		
-		await ctx.send(file = discord.File('./SPOILER_spicy pic.jpg'))
+		await ctx.send(file = discord.File('./SPOILER_spicy_pic.jpg'))
 
 class amogus(commands.Cog):
 	
@@ -328,8 +328,85 @@ class WhaleFacts(commands.Cog):
 		
 		whaleFacts = ["Like all other mammals, whales need to get rid of the waste water they produce. About 166 gallons of urine is excreted by a sei whale in one day. A fin whale's daily production of urine amounts to 257 gallons.", 'Beluga whales have flexible necks, allowing them to move their heads. Their complex communication repertoire of whistles, clicks, and chirps has prompted the nickname "canaries of the sea".', 'Whales are descended from the Artiodactyl species of dinosaurs, which were land livers.', 'Gray whales make one of the longest annual migrations of any mammal: they travel about 10,000 miles (16,000 km) round trip!', "Located in their massive heads, a sperm whale's brain can weigh up to 9kg. That's about as heavy as a Dachshund. Not only that, but the rest of the head which makes up about a third of their body is basically a giant container of oil. It's this oil that made sperm whales so popular for hunting in the last couple of centuries. You could park a car inside of the chamber filled with oils in their skull. Half this high-value oil is actually called 'junk'.", "**Killer whales eat moose**\nNo, they don't jump up onto land and attack the moose. However, orcas have been known to attack moose that are swimming between coastal islands off the northwestern coast of North America. However, this fact is misleading. It's not because it's false, but it's because orcas aren't actually whales, they're dolphins.","WHALES ARE DIVIDED INTO TWO MAIN GROUPS\nThe baleen whales and the toothed whales. Baleen whales have fibrous 'baleen' plates in their mouths instead of teeth which help them filter out huge quantities of krill, plankton, and crustaceans. Toothed whales have teeth which enable them to feed on larger prey such as fish and squid.", 'Whale "vomit" is used in perfumes.', 'HUMPBACK WHALES DON’T EAT FOR MOST OF THE YEAR\nHumpback whales in the Southern Hemisphere live off their fat reserves for 5.5-7.5 months each year, as they migrate from their tropical breeding grounds to the Antarctic, to feed on krill.​', 'ALL TOOTHED WHALES HAVE A "MELON" IN THEIR FOREHEADS\nIts a mass of tissue which focuses the whales calls, vital for communication and echolocation.​ Like bats, they use this echolocation to "see".', "SOME WHALES BUBBLE NET FEED\nThis involves whales cooperatively blowing bubbles that encircle their prey. As the prey won't cross through the bubbles, they're trapped, making it easy for the whales to eat them.", 'THE NAME "NARWHAL" COMES FROM OLD NORSE\nIt means "corpse whale" as their skin colour resembles that of a drowned sailor.', "Whales are World-Class Divers\nMany whale species are able to dive to exceptional depths for exceedingly long durations, but none more so than that Cuvier's beaked whale, which can dive to depths as deep as 3km and stay there for over 2 hours. They eat a great deal of squid, so diving this deep is necessary in order to catch them.", "Whales are never fully asleep\nWhen whales sleep, they don't fully rest their brains like we humans do. Instead, when they sleep they only rest one half of their brain. The other half remains active in order to maintain their breathing, otherwise they would drown!", 'This whale fact is brought to you by Spesta. I Have no idea if it is true, it probably isnt (it isnt) but idc.\nHere it is: A whale cock weighs over 10 kilos']
 		
-		await ctx.reply(f'{random.choice(whaleFacts)}\nCredit: fat boat#9172', mention_author=True)
+		await ctx.send(f'{random.choice(whaleFacts)}\nCredit: fat boat#9172')
+		
+class EncryptDecrypt(commands.Cog):
+	
+	def __init__(self, bot):
+		self.bot = bot
+		
+	@commands.command(description = 'Encrypt message using my simple encryption algorithm')
+	async def encrypt(self, ctx, *, message):
+		
+		encr_letters = {"a": "^1-", "b": "1/^", "c": "%5$", "d": "@4$", "e": "0/@", "f": ";$:", "g": "=5+", "h": "2%4", "i": "35;", "j": "^&@", "k": ":=$", "l": "0??", "m": "&01", "n": "&^1", "o": "$=@", "p": "3@$", "q": "#1%", "r": "#8;", "s": "@-9", "t": "/~7", "u": "1$7", "v": "673", "w": "64$", "x": "#^=", "y": "&37", "z": "?/$", " ": "¦¦¦", "1": "=98", "2": "$$&", "3": ";%5", "4": "$=^", "5": "457", "6": "~+$", "7": "&@^", "8": "80-", "9": "179", "0": "/84", ",": "7^%", ".": ":1%", "!": "0~1", "@": "^76", "#": "977", "$": "/$#", "%": "~!-", "^": "^1!", "&": "+^2", "*": "7-;", "(": "^#?", ")": "4&$", "~": "4~5", "[": "^@7", "]": "688", "-": ":;0", "+": "2&!", "=": "=4^", ":": "393", ";": "538", '"': '~?:', "'": "^%^", "{": "=3^", "}": "32#", "<": ":58", ">": ":;&", "_": "$08", "?": "0$=", "/": "/##", "	": "7^6"}
+		encr_message = []
+		thing = message.lower()
+		
+		for x in thing:
+			stuff = x.replace(x, encr_letters[x])
+			encr_message.append(stuff)
+		
+		await ctx.message.delete()
+		await ctx.author.send('Latest encrypted message from you:')
+		await ctx.author.send(f'`{"".join(encr_message)}`')
 
+	@encrypt.error
+	async def on_command_error(self, ctx, error):
+		
+		if isinstance(error, commands.MissingRequiredArgument):
+			await ctx.reply('Encrypt what ?', mention_author=True)
+
+	@commands.command(description = 'Encrypt message to pig latin')
+	async def piglatin(self, ctx, *, message):
+		
+		pl_str = message.split()
+		stuff = " ".join(x[1:] + x[0] + 'ay' for x in pl_str)
+		
+		await ctx.reply(f'`{stuff}`', mention_author=True)
+	
+	@piglatin.error
+	async def on_command_error(self, ctx, error):
+		
+		if isinstance(error, commands.MissingRequiredArgument):
+			await ctx.reply('Encrypt what ?', mention_author=True)
+
+	@commands.command(description = 'Decrypt message to normal message (only works for my encryption, not else)')
+	async def decrypt(self, ctx, message):
+		
+		decr_letters = {"^1-": "a", "1/^": "b", "%5$": "c", "@4$": "d", "0/@": "e", ";$:": "f", "=5+": "g", "2%4": "h", "35;": "i", "^&@": "j", ":=$": "k", "0??": "l", "&01": "m", "&^1": "n", "$=@": "o", "3@$": "p", "#1%": "q", "#8;": "r", "@-9": "s", "/~7": "t", "1$7": "u", "673": "v", "64$": "w", "#^=": "x", "&37": "y", "?/%": "z", "¦¦¦": " ", "=98": "1", "$$&": "2", ";%5": "3", "$=^": "4", "457": "5", "~+$": "6", "&@^": "7", "80-": "8", "179": "9", "/84": "0", "7^%": ",", ":1%": ".", "0~1": "!", "^76": "@", "977": "#", "/$#": "$", "~!-": "%", "^1!": "^", "+^2": "&", "7-;": "*", "^#?": "(", "4&$": ")", "4-5": "~", "^@7": "[", "688": "]", ":;0": "-", "2$!": "+", "=4^": "=", "393": ":", "538": ";", '~?:': '"', "^%^": "'", "=3^": "{", "32#": "}", ":58": "<", ":;&": ">", "$08": "_", "0$=": "?", "/##": "/", "7^6": "	"}
+		decr_message = []
+		thing = message.lower()		
+		msg_iter = iter(thing)
+	
+		for y in msg_iter:
+			bruh = f'{y + next(msg_iter) + next(msg_iter)}'
+			stuff = bruh.replace(bruh, decr_letters[bruh])
+			decr_message.append(stuff)
+		
+		await ctx.message.delete()
+		await ctx.author.send('Latest decrypted message from you:')
+		await ctx.author.send(f'`{"".join(decr_message)}`')
+	
+	@decrypt.error
+	async def on_command_error(self, ctx, error):
+		
+		if isinstance(error, commands.MissingRequiredArgument):
+			await ctx.reply('Decrypt what ?', mention_author=True)
+	
+	@commands.command(description = 'Decrypt pig latin message to normal message')
+	async def dcpl(self, ctx, *, message):
+		
+		nl_str = message.replace('ay', '').split()
+		stuff = " ".join(x[-1] + x[:-1] for x in nl_str)
+		
+		await ctx.reply(f'`{stuff}`', mention_author=True)
+	
+	@dcpl.error
+	async def on_command_error(self, ctx, error):
+		
+		if isinstance(error, commands.MissingRequiredArgument):
+			await ctx.reply('Decrypt what ?', mention_author=True)
+	
 def setup(bot):
 	bot.add_cog(SayHello(bot))
 	bot.add_cog(Moderation(bot))
@@ -343,3 +420,4 @@ def setup(bot):
 	bot.add_cog(VidandGif(bot))
 	bot.add_cog(stuff(bot))
 	bot.add_cog(WhaleFacts(bot))
+	bot.add_cog(EncryptDecrypt(bot))
