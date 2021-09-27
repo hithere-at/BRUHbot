@@ -250,7 +250,7 @@ class stuff(commands.Cog):
 	@commands.command()
 	async def ask(self, ctx, *, question):
 	
-		questionResponse = ['very yes','wth no','idk']
+		questionResponse = ['yes','wth no','idk']
 	
 		await ctx.reply(f'Q: {question}\nA: {random.choice(questionResponse)}', mention_author=True)
 	
@@ -287,6 +287,11 @@ class amogus(commands.Cog):
 	async def kill(self, ctx):
 	
 		await ctx.reply('https://tenor.com/view/among-us-kill-gif-19295404')			
+
+class pfp(commands.Cog):
+
+	def __init__(self, bot):
+			self.bot = bot
 
 	@commands.command()
 	async def pfp(self, ctx, user: discord.Member):
@@ -421,3 +426,4 @@ def setup(bot):
 	bot.add_cog(stuff(bot))
 	bot.add_cog(WhaleFacts(bot))
 	bot.add_cog(EncryptDecrypt(bot))
+	bot.add_cog(pfp(bot))
