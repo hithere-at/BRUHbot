@@ -172,7 +172,6 @@ class ForbiddenCommands(commands.Cog):
 	async def ForbiddenCommand1(self, ctx):
 	
 		for x in range(5):
-			loopStuff += 1
 			await ctx.author.send('im watching you')
 			await asyncio.sleep(1)
 			
@@ -240,7 +239,7 @@ class RNGstuff(commands.Cog):
 	
 		luckResponse = ['Your luck is bad, very bad. Ask blessing from the lord or something idk','Your luck is normal, nothing special','Your luck is very good. i think you will get good score in your test, hopefully...']
 	
-		await ctx.send(ctx.author.mention, random.choice(luckResponse))
+		await ctx.send(f'{ctx.author.mention} {random.choice(luckResponse)}')
 
 class stuff(commands.Cog):
 	
