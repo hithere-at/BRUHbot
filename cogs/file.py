@@ -270,7 +270,7 @@ class stuff(commands.Cog):
 	@commands.command()
 	async def spicypic(self, ctx):
 		
-		await ctx.send(file = discord.File('./SPOILER_spicy_pic.jpg'))
+		await ctx.send(file = discord.File('./pictures/SPOILER_spicy_pic.jpg'))
 
 class amogus(commands.Cog):
 	
