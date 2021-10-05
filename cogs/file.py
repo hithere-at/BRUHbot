@@ -71,6 +71,19 @@ class Moderation(commands.Cog):
 		
 		if isinstance(error, commands.MemberNotFound):
 			await ctx.reply('yeaaaaaaa, i cant find the user', mention_author=True)
+			
+	@commands.command()
+	@commands.has_permissions(manage_messages=True)
+	async def delete(self, ctx, amount: int):
+		
+		await ctx.message.delete()
+		await ctx.channel.purge(limit = amount)
+		
+	@delete.error	
+	async def on_command_error(self, ctx, error):
+		
+		if isinstance(error, commands.MissingRequiredArgument):
+			await ctx.reply('how many message you want to delete ?')
 	
 class SayHello(commands.Cog):
 	
@@ -80,7 +93,7 @@ class SayHello(commands.Cog):
 	@commands.command()
 	async def sup(self, ctx):
 	
-		supRpns = ['yo wassup','shut up lol','uhhh, are you talking to me ?','ok']
+		supRpns = ['yo wassup','shut up lol','uhhh, are you talking to me ?','ok','phishe']
 		await ctx.reply(random.choice(supRpns), mention_author=True)
 
 	@commands.command(hidden=True)
@@ -88,7 +101,7 @@ class SayHello(commands.Cog):
 	
 		if ctx.author.id == 668794109020078080:
 		
-			supRpnsToUser = ["Moth ? Is that you ? wassup my man","How's life ?","Endless Agony when ?"]		
+			supRpnsToUser = ["Moth ? Is that you ? wassup my man","How's life ?","Endless Agony sequel when ?"]		
 			await ctx.reply(random.choice(supRpnsToUser), mention_author=True)
 
 class UpdateLog(commands.Cog):
@@ -99,7 +112,7 @@ class UpdateLog(commands.Cog):
 	@commands.command(aliases=['updatelogall'])
 	async def updatelog(self, ctx):
 			
-		await ctx.reply('1.0.0= This first release comes with 7 commands. Commands can be found by typing %help\n\n1.1.0 = This updates comes with 3 new commands and %latityintro command patch, it was not working due to typing error. New commands can be found by typing %help\n\n1.1.1 = Added forbidden command\n\n1.1.2 = Minor optimization for forbidden command\n\n1.2.0 = Added 3 new commands and deleted some unnecessary junk. New commands can be found by typing %help\n\n1.3.0 = Added 1 forbidden command and 2 new command. This update also comes with reply system, so now bot can reply in order to eliminate any confusion. New commands can be found by typing %help\n\n1.3.1 = Added a simple error handling of "No command found", major optimization for forbidden command, and patches for some commands\n\n1.4.0 = Code is now written in discord.py rewrite branch, so the bot have full coverage of the Discord API, added error handling for some command and 3 new commands. Commands can be found by typing %help\n\n1.5.0 = Added 3 new command and attachments filter. Commands can be found by typing %help\n\n1.6.0 = Code is now using "cog", so everytime there is a bug, the dev doesnt need to turn off the bot :). Added 1 new commands, which is role giver. Added patch for some commands. New commands can be found by typing %help\n\n1.7.0 = Added 3 new commands and minor optimization for a forbidden command. Type %help for new commands\n\n1.8.0 = Added simple encryptions and decryptions. For now, it only have 2 types of encryption and decryption, which is "Pig Latin" and my own. Some commands also receive command description so you in order to know what does it do. %spicypic commands is now working properly. Type %help to see encrypt/decrypt commands', mention_author=True)
+		await ctx.reply('1.0.0= This first release comes with 7 commands. Commands can be found by typing %help\n\n1.1.0 = This updates comes with 3 new commands and %latityintro command patch, it was not working due to typing error. New commands can be found by typing %help\n\n1.1.1 = Added forbidden command\n\n1.1.2 = Minor optimization for forbidden command\n\n1.2.0 = Added 3 new commands and deleted some unnecessary junk. New commands can be found by typing %help\n\n1.3.0 = Added 1 forbidden command and 2 new command. This update also comes with reply system, so now bot can reply in order to eliminate any confusion. New commands can be found by typing %help\n\n1.3.1 = Added a simple error handling of "No command found", major optimization for forbidden command, and patches for some commands\n\n1.4.0 = Code is now written in discord.py rewrite branch, so the bot have full coverage of the Discord API, added error handling for some command and 3 new commands. Commands can be found by typing %help\n\n1.5.0 = Added 3 new command and attachments filter. Commands can be found by typing %help\n\n1.6.0 = Code is now using "cog", so everytime there is a bug, the dev doesnt need to turn off the bot :). Added 1 new commands, which is role giver. Added patch for some commands. New commands can be found by typing %help\n\n1.7.0 = Added 3 new commands and minor optimization for a forbidden command. Type %help for new commands\n\n1.8.0 = Added simple encryptions and decryptions. For now, it only have 2 types of encryption and decryption, which is "Pig Latin" and my own. Some commands also receive command description so you in order to know what does it do. %spicypic commands is now working properly. Type %help to see encrypt/decrypt commands\n,\n1.9.0 = Added 3 new commands, one of those is purge command, only availabe to someone who have "Manage Messages" permission. 2 other commands can be found by typing %help', mention_author=True)
 
 class ServerStatus(commands.Cog):
 	
@@ -162,6 +175,12 @@ class VidandGif(commands.Cog):
 	async def phishe(self, ctx):
 	
 		await ctx.reply('https://cdn.discordapp.com/attachments/875395171880165398/879642028462448650/phishe.mp4', mention_author=True)
+		
+	@commands.command()
+	async def hampter(self, ctx):
+		
+		hampter_list = ['https://tenor.com/view/bootythehamster-booty-hamster-syrian-syrian-hamster-gif-20948949', 'https://tenor.com/view/shummer-hamster-gif-13082806', 'https://tenor.com/view/hamster-pet-cute-adorable-bff-hamsters-gif-17730896', 'https://tenor.com/view/hamster-chase-cuddles-gif-4372189']
+		await ctx.reply(random.choice(hampter_list), mention_author=True)
 	
 class ForbiddenCommands(commands.Cog):
 	
@@ -270,7 +289,7 @@ class stuff(commands.Cog):
 	@commands.command()
 	async def spicypic(self, ctx):
 		
-		await ctx.send(file = discord.File('./pictures/SPOILER_spicy_pic.jpg'))
+		await ctx.reply(file = discord.File('./pictures/SPOILER_spicy_pic.jpg'), mention_author=True)
 
 class amogus(commands.Cog):
 	
@@ -410,7 +429,18 @@ class EncryptDecrypt(commands.Cog):
 		
 		if isinstance(error, commands.MissingRequiredArgument):
 			await ctx.reply('Decrypt what ?', mention_author=True)
+
+class Pictures(commands.Cog):
 	
+	def __init__(self, bot):
+		self.bot = bot
+	
+	@commands.command(description = 'Show cursed images')
+	async def cursedimg(self, ctx):
+		
+		crsdimg_lst = ['pic1', 'pic2', 'pic3', 'pic4', 'pic5', 'pic6', 'pic7', 'pic8', 'pic9', 'pic10', 'pic11', 'pic12']
+		await ctx.reply(file = discord.File(f'./pictures/{random.choice(crsdimg_lst)}.jpeg'), mention_author=True)
+
 def setup(bot):
 	bot.add_cog(SayHello(bot))
 	bot.add_cog(Moderation(bot))
@@ -426,3 +456,4 @@ def setup(bot):
 	bot.add_cog(WhaleFacts(bot))
 	bot.add_cog(EncryptDecrypt(bot))
 	bot.add_cog(pfp(bot))
+	bot.add_cog(Pictures(bot))
