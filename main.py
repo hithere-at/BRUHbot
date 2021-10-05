@@ -1,6 +1,9 @@
 import discord
 import os
 from discord.ext import commands
+from dotenv import load_dotenv
+
+load_dotenv()
 
 bot = commands.Bot(command_prefix = '%', status = discord.Status.online, activity = discord.Activity(type = discord.ActivityType.listening, name = 'my commands "%"'))
 
@@ -53,5 +56,5 @@ async def changestatus(ctx, botStatus, *, reason):
 	if botStatus == 'dnd':
 		await bot.change_presence(status = discord.Status.dnd, activity = discord.Activity(type = discord.ActivityType.listening, name = f'{reason}'))
 
-token = os.environ.get("BOT_TOKEN")
+token = os.getenv('BOT_TOKEN')
 bot.run(token)
