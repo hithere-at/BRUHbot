@@ -10,6 +10,8 @@ __pycache__/
 .env
 Procfile
 LICENSE
+cat.jpg
+runtime.txt
 
 # Distribution / packaging
 .Python
