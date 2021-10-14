@@ -9,7 +9,7 @@ __pycache__/
 # stuff
 .env
 Procfile
-LICENSE
+LICENSE.md
 cat.jpg
 runtime.txt
 
