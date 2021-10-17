@@ -8,10 +8,7 @@ __pycache__/
 
 # stuff
 .env
-Procfile
-LICENSE.md
-cat.jpg
-runtime.txt
+*.env
 
 # Distribution / packaging
 .Python
