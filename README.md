@@ -3,8 +3,8 @@ BRUHbot is an open source discord bot, written in Python. Anyone can contribute 
 
 ## Features
 - Moderation. Including ban, kick, purge, give role, self assignable role command.
-- Cute gifs (no really, it is really cute)
-- Currency system. (Currently on development stage)
+- Cute gifs. (no really, it is really cute)
+- Economy system. (Currently on development stage)
 
 ## To do list
 1. Better economy system.
