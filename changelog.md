@@ -1,4 +1,4 @@
-# Changlog
+# Changelog
 This text will display all BRUHbot latest update from the first release until now.
 
 ## Ver 1.1.0
