@@ -19,6 +19,7 @@ BRUHbot is an open source discord bot, written in Python. Anyone can contribute 
 1. [Python](https://www.python.org/) 3.8 or higher.
 2. [Pycord.](https://github.com/Pycord-Development/pycord) Install Pycord by typing `python3 -m pip install -U py-cord` or if you are on Windows, then type `py -3 -m pip install -U py-cord`. Checking Pycord github repository is recommended before installing, just to make stuff clear.
 3. [Git.](https://git-scm.com/)
+
 **NOTE:**
 - Issues are accepted in English and Indonesian.
 - Before sending an issue, make sure to check if the issue has been reported. Any issues that are duplicates will be ignored.
