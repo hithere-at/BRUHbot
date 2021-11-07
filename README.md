@@ -21,5 +21,5 @@ BRUHbot is an open source discord bot, written in Python. Anyone can contribute 
 3. [Git.](https://git-scm.com/)
 
 **NOTE:**
-- Issues are accepted in English or Indonesian.
+- Issues are accepted in English and Indonesian.
 - Before sending an issue, make sure to check if the issue has been reported. Any issues that are duplicates will be ignored
