@@ -1,6 +1,5 @@
 import os
 import discord
-import a
 import requests
 from discord.ext import commands, tasks
 
@@ -64,5 +63,4 @@ async def changestatus(ctx, botStatus, *, reason):
 	if botStatus == 'dnd':
 		await bot.change_presence(status = discord.Status.dnd, activity = discord.Activity(type = discord.ActivityType.listening, name = f'{reason}'))
 
-a.keep_alive()
-bot.run(f'{os.getenv("BOT_TOKEN")}')
+bot.run('NzQ1Mjk0ODYwODM5NDIwMDM0.Xzvr7Q.ml51_4frBTD8PYV6cEqfPJDIPYA')
