@@ -1,6 +1,5 @@
 import os
 import discord
-import requests
 from discord.ext import commands, tasks
 
 bot = commands.Bot(command_prefix = '%', help_command = None, status = discord.Status.online, activity = discord.Activity(type = discord.ActivityType.listening, name = 'my commands "%"'))
