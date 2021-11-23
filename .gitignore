@@ -9,6 +9,7 @@ __pycache__/
 # stuff
 .env
 *.env
+*.json
 
 # Distribution / packaging
 .Python
