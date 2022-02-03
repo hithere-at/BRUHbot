@@ -8,47 +8,47 @@ class media(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="Doge smile")
+	@slash_command(description="Doge smile")
 	async def smile(self, ctx):
 
 		await ctx.respond('https://tenor.com/view/perro-xd-xd-moises-xd-gif-18316386')
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="Mr Krab's bruh-ing")
+	@slash_command(description="Mr Krab's bruh-ing")
 	async def mrkrabsbruh(self, ctx):
 
 		await ctx.respond('https://tenor.com/view/mr-krabs-bruh-cringe-meme-gif-20821912')
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="shrimp")
+	@slash_command(description="shrimp")
 	async def shrimp(self, ctx):
 
 		await ctx.respond('https://cdn.discordapp.com/attachments/879172329450643488/879717503784345651/bruh_1.mp4')
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="lesss gooooooooo")
+	@slash_command(description="lesss gooooooooo")
 	async def dababy(self, ctx):
 
 		await ctx.respond('https://tenor.com/view/dababy-lets-go-car-vroom-vroom-gif-21874738')
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="OK BOOMers")
+	@slash_command(description="OK BOOMers")
 	async def latityintro(self, ctx):
 
 		await ctx.respond('https://cdn.discordapp.com/attachments/875395171880165398/879641942131097620/ElectroBOOM_LATITY.mp4')
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="mind if i praise the lord?")
+	@slash_command(description="mind if i praise the lord?")
 	async def thelord(self, ctx):
 
 		await ctx.respond('https://cdn.discordapp.com/attachments/875395171880165398/879641696432947210/PRAISE_THE_LAWD.mp4')
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="chicken mcnuggets")
+	@slash_command(description="chicken mcnuggets")
 	async def chickennugget(self, ctx):
 
 		await ctx.respond('https://tenor.com/view/chicken-nuggets-pics-art-chicken-chicken-nugget-yeah-gif-16426997')
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="phishe being phishe")
+	@slash_command(description="phishe being phishe")
 	async def phishe(self, ctx):
 
 		await ctx.respond('https://cdn.discordapp.com/attachments/875395171880165398/879642028462448650/phishe.mp4')
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="cat gifs. its cute")
+	@slash_command(description="cat gifs. its cute")
 	async def cat(self, ctx):
 
 		cat_stuff = ['https://cdn.discordapp.com/attachments/733869939227624457/876518209342308362/cat.gif',
@@ -58,7 +58,7 @@ class media(commands.Cog):
 				'https://cdn.discordapp.com/attachments/880251530723356762/880447528108183572/20210729_103016.jpg']
 		await ctx.respond(random.choice(cat_stuff))
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="cmon, who doesnt love hampter?")
+	@slash_command(description="cmon, who doesnt love hampter?")
 	async def hampter(self, ctx):
 
 		hampter_list = ['https://tenor.com/view/bootythehamster-booty-hamster-syrian-syrian-hamster-gif-20948949',
@@ -67,7 +67,7 @@ class media(commands.Cog):
 				'https://tenor.com/view/hamster-chase-cuddles-gif-4372189']
 		await ctx.respond(random.choice(hampter_list))
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="All kitty review reports goes here (well actually no)")
+	@slash_command(description="All kitty review reports goes here (well actually no)")
 	async def kittyreview(self, ctx):
 
 		very_cute = ['https://tenor.com/view/kitty-review-kitty-cat-review-gif-20973771',
@@ -85,12 +85,12 @@ class media(commands.Cog):
 				'https://tenor.com/view/kitty-review-kitty-review-gaming-cat-gif-22352786']
 		await ctx.respond(random.choice(very_cute))
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="Cursed image, yea its kinda cursed")
+	@slash_command(description="Cursed image, yea its kinda cursed")
 	async def cursedimg(self, ctx):
 
 		await ctx.respond(file=discord.File(f'./pictures/pic{random.randint(1, 14)}.jpeg'))
 
-	@slash_command(guild_ids=[900247064439574589, 937910852684763146], description="fumo's? hell yeah dude")
+	@slash_command(description="fumo's? hell yeah dude")
 	async def fumo(self, ctx):
 
 		fumos_boi = ['https://tenor.com/view/touhou-fumo-sakuya-spin-gif-18209352',

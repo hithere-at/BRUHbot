@@ -19,10 +19,10 @@ class NormalStuff(commands.Cog):
 
 		else: # else, just chose a random respond lol
 			sup_response = ['yo wassup',
-					'shut up lol',
-					'uhhh, are you talking to me ?',
-					'ok',
-					'phishe']
+							'shut up lol',
+							'uhhh, are you talking to me ?',
+							'ok',
+							'phishe']
 			await ctx.respond(random.choice(sup_response))
 
 	phishe_list = ['hamburger',
