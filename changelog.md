@@ -41,4 +41,10 @@ Added simple decryptions and encryptions. For now, it only have 2 types, which i
 Added 3 new commands, one of those is purge command, only available to someone who have "Manage Messages" permission.
 
 ## Ver 2.0.0
-Major rewrite to the bot, including reworked help command, faster cogs loading, and clean category. The bot also comes with economy system. The bot is also open source now, if you have issues, report it to this github repo. New commands will arrive soon
+Major rewrite to the bot, including reworked help command, faster cogs loading, and clean category. The bot also comes with economy system. The bot is also open source now, if you have issues, report it to this github repo. New commands will arrive soon.
+
+## Ver 2.1.0
+Economy commands now use online database, or specifically [MongoDB](https://www.mongodb.com/) (NoSQL) instead of using JSON to store zenny. We also add `share` command to give someone your zenny, we thought its a great idea to add it. This update also comes with 2 new cursed image and `mts` (Message to Spoiler). `mts` convert message to spoiler for each character, not per word.
+
+## Ver 2.2.0
+Welcome to the biggest update of BRUHbot, Application commands update. [py-cord](https://github.com/Pycord-Development/pycord) released version 2.0.0 beta 1 at 28 January. this comes with many great updates, like autocomplete and buttons. It took 6 days to rewrite BRUHbot for the application commands update. Anyways, this update comes with fumo's gifs, feedback command, and the new category of command, Game. The commands of the new category include rock paper scissor and guess the number game. We're too lazy to add new games sooo yea, sorry. Also, we're updating the obfuscation and deobfuscation method for `obfs` and `deobfs` command, It should be good enough.

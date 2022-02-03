@@ -1,65 +1,54 @@
 import os
 import discord
 from discord.ext import commands, tasks
+from dotenv import load_dotenv
 
-bot = commands.Bot(command_prefix = '%', help_command = None, status = discord.Status.online, activity = discord.Activity(type = discord.ActivityType.listening, name = 'my commands "%"'))
+load_dotenv()
+
+bot = discord.Bot(status = discord.Status.online, activity = discord.Activity(type = discord.ActivityType.listening, name = 'my commands "%"'))
 
 def bestPeople(ctx):
 	return ctx.author.id == 812570189182533642
 
 @bot.event
 async def on_ready():
-
-	reload_cogs.start()
+	await bot.register_commands()
 	print('Online!')
 
-@bot.event
-async def on_command_error(ctx, error):
-
-	if isinstance(error, commands.CommandNotFound):
-		await ctx.reply('Bro. wth are you trying to type ? Also the prefix is "%"', mention_author=True)
-
-@bot.command(hidden=True)
+@bot.slash_command(guild_ids=[900247064439574589, 937910852684763146])
 @commands.check(bestPeople)
 async def open(ctx, files):
 
 	bot.load_extension(f'cogs.{files}')
 
-@bot.command(hidden=True)
+@bot.slash_command(guild_ids=[900247064439574589, 937910852684763146])
 @commands.check(bestPeople)
 async def close(ctx, files):
 
 	bot.unload_extension(f'cogs.{files}')
 
-@bot.command(hidden=True)
+@bot.slash_command(guild_ids=[900247064439574589, 937910852684763146])
 @commands.check(bestPeople)
 async def reload(ctx, files):
 
 	bot.reload_extension(f'cogs.{files}')
 
-for filename in os.listdir('./cogs'):
-	if filename.endswith('.py'):
-		bot.load_extension(f'cogs.{filename[:-3]}')
-
-@tasks.loop(seconds = 60)
-async def reload_cogs():
-
-	cog_list = ['media', 'help', 'moderation', 'normal_stuff', 'security', 'top_secret']
-
-	for x in cog_list:
-		bot.reload_extension(f'cogs.{x}')
-
-@bot.command(hidden=True)
+@bot.slash_command(guild_ids=[900247064439574589, 937910852684763146])
 @commands.check(bestPeople)
-async def changestatus(ctx, botStatus, *, reason):
+async def changestatus(ctx, bot_status, *, reason):
 
-	if botStatus == 'idle':
+	if bot_status == 'idle':
 		await bot.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.listening, name = f'{reason}'))
 
-	if botStatus == 'online':
+	elif bot_status == 'online':
 		await bot.change_presence(status = discord.Status.online, activity = discord.Activity(type = discord.ActivityType.listening, name = f'{reason}'))
 
-	if botStatus == 'dnd':
+	elif bot_status == 'dnd':
 		await bot.change_presence(status = discord.Status.dnd, activity = discord.Activity(type = discord.ActivityType.listening, name = f'{reason}'))
+
+for filename in os.listdir("./cogs"):
+	if filename.endswith(".py"):
+		bot.load_extension(f'cogs.{filename[:-3]}')
+		print(filename, "loaded")
 
 bot.run(f'{os.getenv("BOT_TOKEN")}')

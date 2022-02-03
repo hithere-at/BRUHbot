@@ -1,231 +1,168 @@
 import discord
 from discord.ext import commands
+from discord.commands import slash_command, Option
+import os
+import dns.resolver
+import pymongo
+import random
 import secrets
+from time import time
+
+def gen(rep: int, chars: str) -> str:
+	res = ""
+
+	for _ in range(rep):
+		res += random.choice(chars)
+
+	return res
+
+dns.resolver.default_resolver=dns.resolver.Resolver(configure=False)
+dns.resolver.default_resolver.nameservers=['8.8.8.8']
+
+client = pymongo.MongoClient(f'{os.getenv("MONGODB_URI")}')
+db = client["money"]
+stuff = db["zen"]
 
 class security(commands.Cog):
 
 	def __init__(self, bot):
 		self.bot = bot
 
-	@commands.command(aliases = ['password'])
-	async def genpass(self, ctx, school: int):
+	@slash_command(description="Generate a new password with specified length")
+	async def genpass(self, ctx, length: Option(int, "How long the password will be?")):
 
-		candice = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-		whos_candice = ''.join(secrets.choice(candice) for _ in range(school))
-		await ctx.author.send(f'Here is your password: {whos_candice}')
+		await ctx.author.send(f'Here is your password: {secrets.token_urlsafe(length)}')
+		await ctx.respond('Password has been sent') # idk why but slash command need to be ended with "ctx.respond", otherwise it will say interaction failed
 
-	@genpass.error
-	async def on_command_error(self, ctx, error):
+	@slash_command(guild_ids=[900247064439574589], description="Obfuscate a message until its not readable")
+	@commands.max_concurrency(1, commands.BucketType.user, wait=True)
+	async def obfs(self, ctx, member: Option(discord.Member, "Message for who?"), *, message: Option(str, "The content of the message")):
 
-		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.reply('the length of the password ?', mention_author = True)
+		await ctx.defer()
 
-		if isinstance(error, commands.BadArgument):
-			await ctx.reply('specify using numbers only', mention_author = True)
+		letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890`~!@#$%^&*()[]-+=:;\"\'{}<>|_?/,.	 "
+		seed = int(round(time() * 1000))
+		random.seed(seed)
+		encr = {x: gen(3, "!@#$%^&*;:=+-?/<>") for x in letters}
+		random.seed(time())
+		key = gen(7, "abcdefghijklmnopqrstuvwxyz1234567890")
+		res = [x.replace(x, encr[x]) for x in message]
+		user_doc = stuff.count_documents({"_id": str(member.id)})
 
-	@commands.command()
-	async def encrypt(self, ctx, *, message: str):
+		if user_doc == 0:
+			stuff.insert_one({"_id": str(member.id), "key": key, "en_msg": "".join(res), "seed": seed, "value": 0})
 
-		encr_letters = {"a": "^1-",
-				"b": "1/^",
-				"c": "%5$",
-				"d": "@4$",
-				"e": "0/@",
-				"f": ";$:",
-				"g": "=5+",
-				"h": "2%4",
-				"i": "35;",
-				"j": "^&@",
-				"k": ":=$",
-				"l": "0??",
-				"m": "&01",
-				"n": "&^1",
-				"o": "$=@",
-				"p": "3@$",
-				"q": "#1%",
-				"r": "#8;",
-				"s": "@-9",
-				"t": "/~7",
-				"u": "1$7",
-				"v": "673",
-				"w": "64$",
-				"x": "#^=",
-				"y": "&37",
-				"z": "?/$",
-				" ": "6&_",
-				"1": "=98",
-				"2": "$$&",
-				"3": ";%5",
-				"4": "$=^",
-				"5": "457",
-				"6": "~+$",
-				"7": "&@^",
-				"8": "80-",
-				"9": "179",
-				"0": "/84",
-				",": "7^%",
-				".": ":1%",
-				"!": "0~1",
-				"@": "^76",
-				"#": "977",
-				"$": "/$#",
-				"%": "~!-",
-				"^": "^1!",
-				"&": "+^2",
-				"*": "7-;",
-				"(": "^#?",
-				")": "4&$",
-				"~": "4~5",
-				"[": "^@7",
-				"]": "688",
-				"-": ":;0",
-				"+": "2&!",
-				"=": "=4^",
-				":": "393",
-				";": "538",
-				'"': '~?:',
-				"'": "^%^",
-				"{": "=3^",
-				"}": "32#",
-				"<": ":58",
-				">": ":;&",
-				"_": "$08",
-				"?": "0$=",
-				"/": "/##",
-				"	": "7^6"}
-		encr_message = []
-		message = message.lower()
+		else:
+			stuff.update_one({"_id": str(member.id)}, {"$set": {"key": key, "en_msg": "".join(res), "seed": seed}})
 
-		for x in message:
-			stuff = x.replace(x, encr_letters[x])
-			encr_message.append(stuff)
+		await ctx.author.send("-------------------")
+		await ctx.author.send("Obfuscated message:")
+		await ctx.author.send(f'`{"".join(res)}`')
+		await ctx.author.send("Key:")
+		await ctx.author.send(f'`{key}`')
+		await ctx.author.send("Seed:")
+		await ctx.author.send(f'`{seed}`')
+		await ctx.author.send("Send the message, key, and seed to someone that you specified when writing the obfs command (optional, but reccomended to send the 3 things)")
+		await ctx.respond("Message has been obfuscated")
 
-		await ctx.message.delete()
-		await ctx.author.send('Latest encrypted message from you:')
-		await ctx.author.send(f'`{"".join(encr_message)}`')
+	async def get_seed(ctx: discord.AutocompleteContext):
+		user_acc = stuff.find_one({"_id": str(ctx.interaction.user.id)}, limit=1)
+		return [user_acc.get("seed")]
 
-	@encrypt.error
-	async def on_command_error(self, ctx, error):
+	async def get_key(ctx: discord.AutocompleteContext):
+		user_acc = stuff.find_one({"_id": str(ctx.interaction.user.id)}, limit=1)
+		return [user_acc.get("key")]
 
-		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.reply('Encrypt what ?', mention_author = True)
+	@slash_command(guild_ids=[900247064439574589], description="Deobfuscate message from non-readable to readable message")
+	@commands.max_concurrency(1, commands.BucketType.user, wait=True)
+	async def deobfs(self, ctx, seed: Option(int, "Seed", autocomplete=get_seed), key: Option(str, "Key", autocomplete=get_key), message: Option(str, "Obfuscated message content")):
 
-	@commands.command()
-	async def decrypt(self, ctx, message: str):
+		await ctx.defer()
 
-		decr_letters = {"^1-": "a",
-				"1/^": "b",
-				"%5$": "c",
-				"@4$": "d",
-				"0/@": "e",
-				";$:": "f",
-				"=5+": "g",
-				"2%4": "h",
-				"35;": "i",
-				"^&@": "j",
-				":=$": "k",
-				"0??": "l",
-				"&01": "m",
-				"&^1": "n",
-				"$=@": "o",
-				"3@$": "p",
-				"#1%": "q",
-				"#8;": "r",
-				"@-9": "s",
-				"/~7": "t",
-				"1$7": "u",
-				"673": "v",
-				"64$": "w",
-				"#^=": "x",
-				"&37": "y",
-				"?/%": "z",
-				"6&_": " ",
-				"=98": "1",
-				"$$&": "2",
-				";%5": "3",
-				"$=^": "4",
-				"457": "5",
-				"~+$": "6",
-				"&@^": "7",
-				"80-": "8",
-				"179": "9",
-				"/84": "0",
-				"7^%": ",",
-				":1%": ".",
-				"0~1": "!",
-				"^76": "@",
-				"977": "#",
-				"/$#": "$",
-				"~!-": "%",
-				"^1!": "^",
-				"+^2": "&",
-				"7-;": "*",
-				"^#?": "(",
-				"4&$": ")",
-				"4-5": "~",
-				"^@7": "[",
-				"688": "]",
-				":;0": "-",
-				"2$!": "+",
-				"=4^": "=",
-				"393": ":",
-				"538": ";",
-				'~?:': '"',
-				"^%^": "'",
-				"=3^": "{",
-				"32#": "}",
-				":58": "<",
-				":;&": ">",
-				"$08": "_",
-				"0$=": "?",
-				"/##": "/",
-				"7^6": "	"}
-		decr_message = []
-		message = message.lower()
-		msg_iter = iter(message)
+		bruh = []
+		de_msg = []
+		counter = 0
+		author_cdocs = stuff.count_documents({"_id": str(ctx.author.id)}, limit=1)
 
-		for y in msg_iter:
-			bruh = f'{y + next(msg_iter) + next(msg_iter)}'
-			stuff = bruh.replace(bruh, decr_letters[bruh])
-			decr_message.append(stuff)
+		if author_cdocs == 0:
+			await ctx.respond("You dont even have your name written in the database")
 
-		await ctx.message.delete()
-		await ctx.author.send('Latest decrypted message from you:')
-		await ctx.author.send(f'`{"".join(decr_message)}`')
+		author_doc = stuff.find_one({"_id": str(ctx.author.id)}, limit=1)
 
-	@decrypt.error
-	async def on_command_error(self, ctx, error):
+		try:
 
-		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.reply('Decrypt what ?', mention_author = True)
+			# Check if seed, key, message matched with the argument
+			# Seed section
+			if seed == author_doc["seed"]:
+				bruh.append("Seed: Passed")
+				counter += 1
 
-	@commands.command()
-	async def piglatin(self, ctx, *, message: str):
+			else:
+				bruh.append("Seed: Failed")
+
+			# Key section
+			if key == author_doc["key"]:
+				bruh.append("Key: Passed")
+				counter += 1
+
+			else:
+				bruh.append("Key: Failed")
+
+			# Message section (obfuscated)
+			if message == author_doc["en_msg"]:
+				bruh.append("Mesage: Passed")
+				counter += 1
+
+			else:
+				bruh.append("Message: Failed")
+
+			# if the program passed all the seed, key, message check
+			if counter == 3:
+				letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890`~!@#$%^&*()[]-+=|:;\"\'{}<>_?/,.	 "
+				random.seed(seed)
+				enc = {x: gen(3, "!@#$%^&*;:=+-?/<>") for x in letters}
+				random.seed(time())
+
+				dec = {y: x for x, y in enc.items()}
+				enc.clear()
+
+				# Decryption
+				msg_iter = iter(message)
+
+				for i in msg_iter:
+					temp = i + next(msg_iter) + next(msg_iter)
+					res = temp.replace(temp, dec[temp])
+					de_msg.append(res)
+
+				stuff.update_one({"_id": str(ctx.author.id)}, {"$unset": {"en_msg": "", "seed": "", "key": ""}})
+
+				await ctx.author.send("-------------------------")
+				await ctx.author.send("Latest decrypted message:")
+				await ctx.author.send("".join(de_msg))
+				await ctx.respond("Message has been deobfuscated")
+
+			# else, say what check that fails
+			else:
+				await ctx.respond("\n".join(bruh))
+
+		except KeyError:
+			await ctx.respond('this message is not for you. go away')
+
+	@slash_command(description="Transfrom normal message to pig latin")
+	async def piglatin(self, ctx, *, message: Option(str, "Normal message")):
 
 		xdnt = message.split()
 		stuff = " ".join(x[1:] + x[0] + 'ay' for x in xdnt)
 
-		await ctx.reply(f'`{stuff}`', mention_author = True)
+		await ctx.respond(f'`{stuff}`')
 
-	@piglatin.error
-	async def on_command_error(self, ctx, error):
-
-		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.reply('where is the message ?', mention_author = True)
-
-	@commands.command()
-	async def dcpl(self, ctx, *, message: str):
+	@slash_command(description="Transform pig latin message to normal")
+	async def dcpl(self, ctx, *, message: Option(str, "Pig latin message")):
 
 		pognt = message.replace('ay', '').split()
 		stuff = ' '.join(x[-1] + x[:-1] for x in pognt)
 
-		await ctx.reply(f'`{stuff}`', mention_author = True)
-
-	@dcpl.error
-	async def on_command_error(self, ctx, error):
-
-		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.reply('where is the message ?', mention_author = True)
+		await ctx.respond(f'`{stuff}`')
 
 def setup(bot):
 

@@ -1,34 +1,31 @@
 import discord
 from discord.ext import commands
-import random
+from discord.commands import slash_command,	Option
+import random # random module for randomizing
 
 class NormalStuff(commands.Cog):
 
 	def __init__(self, bot):
 		self.bot = bot
 
-	@commands.command()
+	@slash_command(description="Say hello to the bot")
 	async def sup(self, ctx):
 
-		if ctx.author.id == 668794109020078080:
+		if ctx.author.id == 668794109020078080: # if the author id is the id of my friend then chose a random respond specified below
 			sup_response_motheye = ['moth ? Is that you ? wassup my man',
 						'how is life ?',
 						'Endless Agony sequel when ?']
-			await ctx.reply(random.choice(sup_response_motheye), mention_author = True)
+			await ctx.respond(random.choice(sup_response_motheye))
 
-		else:
+		else: # else, just chose a random respond lol
 			sup_response = ['yo wassup',
 					'shut up lol',
 					'uhhh, are you talking to me ?',
 					'ok',
 					'phishe']
-			await ctx.reply(random.choice(sup_response), mention_author = True)
+			await ctx.respond(random.choice(sup_response))
 
-	@commands.command()
-	async def givefood(self, ctx, *, food: str):
-
-		food = food.replace(' ', '_')
-		phishe_list = ['hamburger',
+	phishe_list = ['hamburger',
 				'pizza',
 				'bacon',
 				'bread',
@@ -58,7 +55,7 @@ class NormalStuff(commands.Cog):
 				'kiwi',
 				'avocado',
 				'olive',
-				'broccoli',
+				'broccoli'
 				'leafy_green',
 				'bell_pepper',
 				'cucumber',
@@ -83,7 +80,8 @@ class NormalStuff(commands.Cog):
 				'cut_of_meat',
 				'poultry_leg',
 				'meat_on_bone',
-				'hotdog','fries',
+				'hotdog',
+				'fries',
 				'sandwich',
 				'stuffed_flatbread',
 				'falafel',
@@ -146,75 +144,73 @@ class NormalStuff(commands.Cog):
 				'bowl_with_spoon',
 				'takeout_box',
 				'chopsticks',
-				'salt']
+				'salt'] # The discord food emoji list
 
-		if any(phishe in food for phishe in phishe_list):
-			await ctx.reply(f'Here you go :{food}:', mention_author = True)
+	async def get_phishe_list(ctx: discord.AutocompleteContext):
+		return [food for food in phishe_list if color.startswith(ctx.value.lower())]
 
-		else:
-			await ctx.reply('no such food found on discord food emoji list', mention_author = True)
+	@slash_command(description="Ask the bot to give you food")
+	async def givefood(self, ctx, *, food: Option(str, "What food?", autocomplete=get_phishe_list)):
 
-	@givefood.error
-	async def on_command_error(self, ctx, error):
+		food = food.replace(' ', '_') # replace space with underscore
 
-		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.reply('give what', mention_author = True)
+		if any(phishe in food for phishe in phishe_list): # if any "food" varible is in the discord food emoji list, then respond with the "food" varible
+			await ctx.respond(f'Here you go :{food}:')
 
-	@commands.command()
-	async def pfp(self, ctx, gman: discord.Member = None):
+		else: # else, just say theres nothing
+			await ctx.respond('no such food found on discord food emoji list')
 
-		if gman == None:
-			author_pic_embed = discord.Embed(title = '', description = '', color = discord.Color.blue())
-			author_pic_embed.set_image(url = ctx.author.avatar_url)
-			await ctx.reply(embed = author_pic_embed, mention_author = True)
+	@slash_command(description="Display your profile picture")
+	async def pfp(self, ctx, member: Option(discord.Member, "Whose profile picture ?") = None):
 
-		else:
-			pic_embed = discord.Embed(title = '', description = '', color = discord.Color.blue())
-			pic_embed.set_image(url = gman.avatar_url)
-			await ctx.reply(embed = pic_embed, mention_author = True)
+		user = member or ctx.author
 
-	@commands.command()
+		pic_embed = discord.Embed(title = '', description = '', color = discord.Color.blue())
+		author_pic_embed.set_image(url = user.avatar.url)
+		await ctx.respond(embed=pic_embed)
+
+	@slash_command(description="Check bot latency")
 	async def latency(self, ctx):
 
-		await ctx.reply(f'{round(self.bot.latency * 1000)}ms', mention_author = True)
+		await ctx.respond(f'{round(self.bot.latency * 1000)}ms')
 
-	@commands.command()
+	@slash_command(description="Check how lucky you are")
 	async def luckcheck(self, ctx):
 
 		luckResponse = ['Your luck is bad, very bad. Ask blessing from the lord or something idk',
-				'Your luck is normal, nothing special',
-				'Your luck is very good. i think you will get good score in your test, hopefully...']
-		await ctx.send(f'{ctx.author.mention} {random.choice(luckResponse)}')
+						'Your luck is normal, nothing special',
+						'Your luck is very good. i think you will get good score in your test, hopefully...']
+		await ctx.respond(random.choice(luckResponse))
 
-	@commands.command(aliases = ['outofcontext'])
-	async def nocontext(self, ctx):
+	@slash_command(description="out of context")
+	async def nocontext(self, ctx, *, custom_content: Option(str, "idk how to explain this") = None):
 
-		im_you = random.randint(0, 101)
-		barney = ['bruh',
-			'noice',
-			'cool :sunglasses:',
-			'sh*t (jk)',
-			'fury']
-		await ctx.send(f'{ctx.author.mention} You are **{im_you}% {random.choice(barney)}**')
+		im_you = random.randint(0, 101) # make a random number
 
-	@commands.command()
+		if custom_content is not None: # self explanatory
+			await ctx.respond(f'You are **{im_you}% {custom_content}**')
+
+		else: # else, chose a random content from a list
+			barney = ['bruh',
+				'noice',
+				'cool :sunglasses:',
+				'sh*t (jk)',
+				'fury']
+			await ctx.respond(f'You are **{im_you}% {random.choice(barney)}**')
+
+	@slash_command(description="Ask the bot a question")
 	async def ask(self, ctx, *, question: str):
 
 		gordon = ['yes',
 			'wth no',
+			'maybe',
 			'idk']
-		await ctx.reply(f'Q: {question}\nA: {random.choice(gordon)}', mention_author = True)
+		await ctx.respond(f'Q: {question}\nA: {random.choice(gordon)}')
 
-	@ask.error
-	async def on_command_error(self, ctx, error):
+	@slash_command(description="Rate your GD level (no this is just a joke)")
+	async def gdlevelrate(self, ctx, level_id: int):
 
-		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.reply('Where is the question ?', mention_author = True)
-
-	@commands.command(aliases=['levelrate'])
-	async def gdlevelrate(self, ctx, levelID: int):
-
-		rateResponse = ['✩0: Does your level even exist ?',
+		rate_response = ['✩0: Does your level even exist ?',
 				'★1 (Auto): You like to make auto level ? weird... but ok',
 				'★2 (Easy): I bet its your first time making this level',
 				'★3 (Normal): You probably like to play HOW by spu7nix',
@@ -225,18 +221,9 @@ class NormalStuff(commands.Cog):
 				'★8 (Insane): You have annoying gameplay, i swear...',
 				'★9 (Insane): Your level is basically failed demon',
 				'★10 (Demon): Hope you make it to the weekly demon :)']
-		await ctx.reply(f'ID = {levelID}\n\n{random.choice(rateResponse)}', mention_author=True)
+		await ctx.respond(f'ID = {level_id}\n\n{random.choice(rate_response)}')
 
-	@gdlevelrate.error
-	async def on_command_error(self, ctx, error):
-
-		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.reply('where is the level ?', mention_author = True)
-
-		if isinstance(error, commands.BadArgument):
-			await ctx.reply('level must be ID to prevent ambiguity', mention_author = True)
-
-	@commands.command()
+	@slash_command(description="Give you whale facts")
 	async def aboutwhale(self, ctx):
 
 		whale_shits = ['Like all other mammals, whales need to get rid of the waste water they produce. About 166 gallons of urine is excreted by a sei whale in one day. A fin whale\'s daily production of urine amounts to 257 gallons.',
@@ -254,8 +241,47 @@ class NormalStuff(commands.Cog):
 				'**Whales are World-Class Divers**\nMany whale species are able to dive to exceptional depths for exceedingly long durations, but none more so than that Cuvier\'s beaked whale, which can dive to depths as deep as 3km and stay there for over 2 hours. They eat a great deal of squid, so diving this deep is necessary in order to catch them.',
 				'**Whales are never fully asleep**\nWhen whales sleep, they don\'t fully rest their brains like we humans do. Instead, when they sleep they only rest one half of their brain. The other half remains active in order to maintain their breathing, otherwise they would drown!',
 				'This whale fact is brought to you by Spesta. I Have no idea if it is true, it probably isnt (it isnt) but idc.\nHere it is: A whale cock weighs over 10 kilos']
-		await ctx.send(f'{random.choice(whale_shits)}\n\nCredit: fat boat#9172')
+		await ctx.respond(f'{random.choice(whale_shits)}\n\nCredit: fat boat#9172')
+
+	@slash_command(description="Change normal message to spoiler based on the type")
+	async def mts(self, ctx, type: Option(str, "Pick the type", choices=["word", "char"]), *, message: str):
+
+		type = type.lower()
+		res = ""
+
+		if type == "word": # turn string to spoiler string per word
+
+			for x in message.split():
+				res += f'||{x} ||'
+
+		elif type == "char": # its the same as above, but per character
+
+			for x in message:
+				res += f'||{x}||'
+
+		else:
+				await ctx.respond("Unknown type")
+				return
+
+		await ctx.respond(res)
+
+	@slash_command(description="Give developers feedback")
+	async def feedback(self, ctx, type: Option(str, "Pick the type", choices=["suggestion", "bug"]), *, content: Option(str, "The content of the feedback")):
+
+		type = type.lower()
+
+		if type == "suggestion":
+			with open("suggestions.txt", "a") as file:
+				file.write(f'From {ctx.author.name}: "{content}"\n\n')
+				await ctx.respond("Sent!")
+
+		elif type == "bug":
+			with open("bugs.txt", "a") as file:
+				file.write(f'From {ctx.author.name}: "{content}"\n\n')
+				await ctx.respond("Sent!")
+
+		else:
+			await ctx.respond("Cannot find feedback type, please chose the available option (bug/suggestion)")
 
 def setup(bot):
-
 	bot.add_cog(NormalStuff(bot))

@@ -17,8 +17,20 @@ BRUHbot is an open source discord bot, written in Python. Anyone can contribute 
 ## Contributing
 **Requirements:**
 1. [Python](https://www.python.org/) 3.8 or higher.
-2. [Pycord.](https://github.com/Pycord-Development/pycord) Install Pycord by typing `python3 -m pip install -U py-cord` or if you are on Windows, then type `py -3 -m pip install -U py-cord`. Checking Pycord github repository is recommended before installing, just to make stuff clear.
+2. [MongoDB.](https://www.mongodb.com)
 3. [Git.](https://git-scm.com/)
+
+**Steps**
+1. Clone this repository by typing the command below to your terminal/command prompt:
+```
+git clone httsp://github.com/bestpeople105/BRUHbot.git
+```
+2. After cloning the repo, change your current working directory by typing:
+```
+cd BRUHbot
+```
+3. Now you should be in BRUHbot directory, make a file called `.env`. Yes, just `.env`.
+4. After creating the `.env` file, edit the content of `.env` file with any text editors. Now you should see a blank text, its time fill some stuff to it. Type the bot token and your MongoDB database
 
 **NOTE:**
 - Issues are accepted in English and Indonesian.
