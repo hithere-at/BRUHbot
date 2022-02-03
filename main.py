@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-bot = discord.Bot(status = discord.Status.online, activity = discord.Activity(type = discord.ActivityType.listening, name = 'my commands "%"'))
+bot = discord.Bot(status = discord.Status.online, activity = discord.Activity(type = discord.ActivityType.listening, name = 'my commands "/"'))
 
 def bestPeople(ctx):
 	return ctx.author.id == 812570189182533642
@@ -45,6 +45,11 @@ async def changestatus(ctx, bot_status, *, reason):
 
 	elif bot_status == 'dnd':
 		await bot.change_presence(status = discord.Status.dnd, activity = discord.Activity(type = discord.ActivityType.listening, name = f'{reason}'))
+
+@bot.slash_command(guild_ids=[900247064439574589, 937910852684763146])
+@commands.check(bestPeople)
+async def test(ctx):
+		await ctx.respond("Hello")
 
 for filename in os.listdir("./cogs"):
 	if filename.endswith(".py"):
