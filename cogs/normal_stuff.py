@@ -166,7 +166,7 @@ class NormalStuff(commands.Cog):
 		user = member or ctx.author
 
 		pic_embed = discord.Embed(title = '', description = '', color = discord.Color.blue())
-		author_pic_embed.set_image(url = user.avatar.url)
+		pic_embed.set_image(url = user.avatar.url)
 		await ctx.respond(embed=pic_embed)
 
 	@slash_command(description="Check bot latency")

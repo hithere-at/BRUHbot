@@ -34,7 +34,7 @@ class security(commands.Cog):
 		await ctx.author.send(f'Here is your password: {secrets.token_urlsafe(length)}')
 		await ctx.respond('Password has been sent') # idk why but slash command need to be ended with "ctx.respond", otherwise it will say interaction failed
 
-	@slash_command(guild_ids=[900247064439574589], description="Obfuscate a message until its not readable")
+	@slash_command(description="Obfuscate a message until its not readable")
 	@commands.max_concurrency(1, commands.BucketType.user, wait=True)
 	async def obfs(self, ctx, member: Option(discord.Member, "Message for who?"), *, message: Option(str, "The content of the message")):
 
@@ -73,7 +73,7 @@ class security(commands.Cog):
 		user_acc = stuff.find_one({"_id": str(ctx.interaction.user.id)}, limit=1)
 		return [user_acc.get("key")]
 
-	@slash_command(guild_ids=[900247064439574589], description="Deobfuscate message from non-readable to readable message")
+	@slash_command(description="Deobfuscate message from non-readable to readable message")
 	@commands.max_concurrency(1, commands.BucketType.user, wait=True)
 	async def deobfs(self, ctx, seed: Option(int, "Seed", autocomplete=get_seed), key: Option(str, "Key", autocomplete=get_key), message: Option(str, "Obfuscated message content")):
 
