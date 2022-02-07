@@ -5,7 +5,7 @@ from youtube_search import YoutubeSearch as ytsearch
 from discord.ext import commands
 from discord.commands import slash_command, Option, SlashCommandGroup
 
-ytdl_opts = {"format": "m4a", "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a", "preferredquality": "128"}]}
+ytdl_opts = {"format": "bestaudio", "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "mp3", "preferredquality": "192"}]}
 ffm_opts = {"before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", "options": "-vn"}
 server_queue = {}
 
