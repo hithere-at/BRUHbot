@@ -50,8 +50,6 @@ async def changestatus(ctx, bot_status, *, reason):
 async def test(ctx):
 		await ctx.respond("Hello")
 
-os.system("apt install ffmpeg")
-
 for filename in os.listdir("./cogs"):
 	if filename.endswith(".py"):
 		bot.load_extension(f'cogs.{filename[:-3]}')
