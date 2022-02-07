@@ -1,7 +1,13 @@
 import discord
+import gd
+import os
 from discord.ext import commands
 from discord.commands import slash_command,	Option
+from github import Github
 import random # random module for randomizing
+
+git_user = Github(os.getenv("GITHUB_TOKEN"))
+gd_client = gd.Client()
 
 class NormalStuff(commands.Cog):
 
@@ -25,7 +31,9 @@ class NormalStuff(commands.Cog):
 							'phishe']
 			await ctx.respond(random.choice(sup_response))
 
-	phishe_list = ['hamburger',
+	async def get_phishe_list(ctx: discord.AutocompleteContext):
+		global phishe_list
+		phishe_list = ['hamburger',
 				'pizza',
 				'bacon',
 				'bread',
@@ -146,8 +154,7 @@ class NormalStuff(commands.Cog):
 				'chopsticks',
 				'salt'] # The discord food emoji list
 
-	async def get_phishe_list(ctx: discord.AutocompleteContext):
-		return [food for food in phishe_list if color.startswith(ctx.value.lower())]
+		return [food for food in phishe_list if food.startswith(ctx.value.lower())]
 
 	@slash_command(description="Ask the bot to give you food")
 	async def givefood(self, ctx, *, food: Option(str, "What food?", autocomplete=get_phishe_list)):
@@ -208,20 +215,27 @@ class NormalStuff(commands.Cog):
 		await ctx.respond(f'Q: {question}\nA: {random.choice(gordon)}')
 
 	@slash_command(description="Rate your GD level (no this is just a joke)")
-	async def gdlevelrate(self, ctx, level_id: int):
+	async def gdlevelrate(self, ctx, level_id: Option(int, "Level ID to be rated")):
 
-		rate_response = ['✩0: Does your level even exist ?',
-				'★1 (Auto): You like to make auto level ? weird... but ok',
-				'★2 (Easy): I bet its your first time making this level',
-				'★3 (Normal): You probably like to play HOW by spu7nix',
-				'★4 (Hard): I hope your level get featured mate',
-				'★5 (Hard): You like to make a level that make people grinding stars an easy life',
-				'★6 (Harder): To the person who like to make this kind of level, i like you. you make my grind less painful',
-				'★7 (Harder): Your level is kinda hard, y\'know ?',
-				'★8 (Insane): You have annoying gameplay, i swear...',
-				'★9 (Insane): Your level is basically failed demon',
-				'★10 (Demon): Hope you make it to the weekly demon :)']
-		await ctx.respond(f'ID = {level_id}\n\n{random.choice(rate_response)}')
+		try:
+			level = await gd_client.get_level(level_id)
+
+		except gd.MissingAccess:
+			return await ctx.respond("An error has occured when finding level")
+
+		rate_response = {0: "✩0: You're a shy person",
+						1: '★1 (Auto): You like to make auto level ? weird... but ok',
+						2: '★2 (Easy): I bet its your first time making this level',
+						3: '★3 (Normal): You probably like to play HOW by spu7nix',
+						4: '★4 (Hard): I hope your level get featured mate',
+						5: '★5 (Hard): You like to make a level that make people grinding stars an easy life',
+						6: '★6 (Harder): To the person who like to make this kind of level, i like you. you make my grind less painful',
+						7: '★7 (Harder): Your level is kinda hard, y\'know ?',
+						8: '★8 (Insane): You have annoying gameplay, i swear...',
+						9: '★9 (Insane): Your level is basically failed demon',
+						10: '★10 (Demon): Hope you make it to the weekly demon :)'}
+
+		await ctx.respond(f'Level name: **{level.name}**\nLevel creator: **{level.creator}**\nLevel ID: **{level_id}**\n\n{rate_response[level.requested_stars]}')
 
 	@slash_command(description="Give you whale facts")
 	async def aboutwhale(self, ctx):
@@ -268,20 +282,13 @@ class NormalStuff(commands.Cog):
 	@slash_command(description="Give developers feedback")
 	async def feedback(self, ctx, type: Option(str, "Pick the type", choices=["suggestion", "bug"]), *, content: Option(str, "The content of the feedback")):
 
+		await ctx.defer()
+
 		type = type.lower()
 
-		if type == "suggestion":
-			with open("suggestions.txt", "a") as file:
-				file.write(f'From {ctx.author.name}: "{content}"\n\n')
-				await ctx.respond("Sent!")
-
-		elif type == "bug":
-			with open("bugs.txt", "a") as file:
-				file.write(f'From {ctx.author.name}: "{content}"\n\n')
-				await ctx.respond("Sent!")
-
-		else:
-			await ctx.respond("Cannot find feedback type, please chose the available option (bug/suggestion)")
+		bot_repo = git_user.get_repo("bestpeople105/BRUHbot")
+		bot_repo.create_issue(title=f"{type} from {ctx.author.name}", body=content)
+		await ctx.respond("Sent!")
 
 def setup(bot):
 	bot.add_cog(NormalStuff(bot))

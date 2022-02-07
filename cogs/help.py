@@ -19,6 +19,7 @@ class Help(commands.Cog):
 		help_embed.add_field(name='Category: amogus (pls dont try this)', value='`sus, kill`')
 		help_embed.add_field(name='Category: Economy', value='`daily, balance, quest, share, shop`')
 		help_embed.add_field(name='Category: Game', value='`rps, guessnum`')
+		help_embed.add_field(name='Category: Music', value='`queue, play, stop, pause, resume, ytsearch`')
 		help_embed.set_footer(text='Im sleepy...')
 		await ctx.respond(embed=help_embed)
 

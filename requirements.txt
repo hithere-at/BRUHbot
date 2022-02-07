@@ -1,5 +1,19 @@
 py-cord==2.0.0b1
 
+PyNacl
+
+PyGithub
+
+py-cord[voice]
+
+py-cord[speed]
+
+gd.py[speedups]
+
+yt-dlp
+
+youtube-search
+
 pymongo
 
 dnspython

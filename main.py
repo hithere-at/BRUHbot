@@ -5,14 +5,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-bot = discord.Bot(status = discord.Status.online, activity = discord.Activity(type = discord.ActivityType.listening, name = 'my commands "/"'))
+bot = discord.Bot(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name='my commands "/"'))
 
 def bestPeople(ctx):
 	return ctx.author.id == 812570189182533642
 
 @bot.event
 async def on_ready():
-	await bot.register_commands()
 	print('Online!')
 
 @bot.slash_command(guild_ids=[900247064439574589, 937910852684763146])
