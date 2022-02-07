@@ -8,6 +8,12 @@ gd.py[speedups]
 
 youtube-search
 
+pycryptodomex
+
+mutagen
+
+websockets
+
 pymongo
 
 dnspython
