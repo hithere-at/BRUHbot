@@ -32,8 +32,8 @@ def write_new_doc(info):
 
 # Initialize MongoDB client
 client = pymongo.MongoClient(f'{os.getenv("MONGODB_URI")}')
-db = client["bruh"]
-zenny = db["nice"]
+db = client["money"]
+zenny = db["zen"]
 
 # Initialize currency commands
 class Economy(commands.Cog):
