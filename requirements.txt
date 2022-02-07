@@ -6,8 +6,6 @@ PyGithub
 
 gd.py[speedups]
 
-py-cord[voice]
-
 youtube-search
 
 pycryptodomex
