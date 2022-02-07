@@ -46,7 +46,7 @@ class Game(commands.Cog):
 		name = {1: "Rock", 2: "Paper", 3: "Scissor"}
 		rules = {1: 3, 2: 1, 3: 2}
 		enemy = secrets.choice([1, 2, 3]) # Basically the same as random.choice but more secure
-		choices = RPSButton(timeout=8.0)
+		choices = RPSButton()
 
 		await ctx.respond("Welcome to rock paper scissor, please choose one the following choices\n1. Rock\n2. Paper\n3. Scissor\nYou have 8 seconds to choose", view=choices)
 		await choices.wait()
