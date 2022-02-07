@@ -1,6 +1,6 @@
 import discord
 import asyncio
-from youtube_dl import YoutubeDL as ytdl
+from yt_dlp import YoutubeDL as ytdl
 from youtube_search import YoutubeSearch as ytsearch
 from discord.ext import commands
 from discord.commands import slash_command, Option, SlashCommandGroup
@@ -72,7 +72,7 @@ class Music(commands.Cog):
 			server_queue[ctx.guild.id] = []
 
 		junk = await get_ytdl_inf(ytdl_opts, query)
-		hinokami = junk["entries"][0]["formats"][0]["url"]
+		hinokami = junk["entries"][0]["url"]
 		kagura = junk["entries"][0]["title"]
 
 		server_queue[ctx.guild.id].append([hinokami, kagura])
@@ -178,7 +178,7 @@ class Music(commands.Cog):
 
 		if not vc.is_playing():
 			staaaaaares = await get_ytdl_inf(ytdl_opts, content)
-			haha_eren_go = staaaaaares["entries"][0]["formats"][0]["url"]
+			haha_eren_go = staaaaaares["entries"][0]["url"]
 			rumbling_rumbling = staaaaaares["entries"][0]["title"]
 			await play_music(ctx, False, [haha_eren_go, rumbling_rumbling])
 
