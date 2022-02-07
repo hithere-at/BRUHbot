@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-bot = discord.Bot(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name='my commands "/"'))
+bot = discord.Bot(debug_guilds=[937910852684763146], status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name='my commands "/"'))
 
 def bestPeople(ctx):
 	return ctx.author.id == 812570189182533642

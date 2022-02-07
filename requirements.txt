@@ -4,13 +4,7 @@ PyNacl
 
 PyGithub
 
-py-cord[voice]
-
-py-cord[speed]
-
 gd.py[speedups]
-
-yt-dlp
 
 youtube-search
 

@@ -1,6 +1,6 @@
 import discord
 import asyncio
-from yt_dlp import YoutubeDL as ytdl
+from youtube_dl import YoutubeDL as ytdl
 from youtube_search import YoutubeSearch as ytsearch
 from discord.ext import commands
 from discord.commands import slash_command, Option, SlashCommandGroup
@@ -15,7 +15,7 @@ async def play_next_queue(ctx):
 		del(server_queue[ctx.guild.id][0])
 
 		if len(server_queue[ctx.guild.id]) >= 1:
-			await play_music(ctx, True, server_queue[ctx.guild.id][0][0])
+			await play_music(ctx, True, server_queue[ctx.guild.id][0])
 
 	except IndexError:
 		await ctx.respond("Queue has been burned")
@@ -31,11 +31,11 @@ async def get_ytsearch_res(query: str, max: int) -> list:
 async def play_music(ctx, from_queue: bool, inf: list):
 
 	if from_queue is True:
-		ctx.guild.voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(inf[0], **ffm_opts), volume=0.6), after=lambda x: asyncio.run(play_next_queue(ctx)))
+		ctx.guild.voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(inf[0], **ffm_opts), volume=0.7), after=lambda x: asyncio.run(play_next_queue(ctx)))
 		await ctx.respond(f"Now playing **{inf[1]}** from your queue")
 
 	elif from_queue is False:
-		ctx.guild.voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(inf[0], **ffm_opts), volume=0.6))
+		ctx.guild.voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(inf[0], **ffm_opts), volume=0.7))
 		await ctx.respond(f"Now playing **{inf[1]}**")
 
 class Music(commands.Cog):
@@ -72,7 +72,7 @@ class Music(commands.Cog):
 			server_queue[ctx.guild.id] = []
 
 		junk = await get_ytdl_inf(ytdl_opts, query)
-		hinokami = junk["entries"][0]["url"]
+		hinokami = junk["entries"][0]["formats"][0]["url"]
 		kagura = junk["entries"][0]["title"]
 
 		server_queue[ctx.guild.id].append([hinokami, kagura])
@@ -142,12 +142,12 @@ class Music(commands.Cog):
 		if vc not in self.bot.voice_clients: return await ctx.respond("im not in your voice channel")
 
 		if not vc.is_playing():
-			await play_music(ctx, True, server_queue[ctx.guild.id][0][0])
+			await play_music(ctx, True, server_queue[ctx.guild.id][0])
 
 		else:
 			await ctx.respond("Already playing song")
 
-	@queue_stuff.command(description="Skip current skng and plah the next song on the queue")
+	@queue_stuff.command(description="Skip current song and play the next song on the queue")
 	async def skip(self, ctx):
 
 		await ctx.defer()
@@ -178,7 +178,7 @@ class Music(commands.Cog):
 
 		if not vc.is_playing():
 			staaaaaares = await get_ytdl_inf(ytdl_opts, content)
-			haha_eren_go = staaaaaares["entries"][0]["url"]
+			haha_eren_go = staaaaaares["entries"][0]["formats"][0]["url"]
 			rumbling_rumbling = staaaaaares["entries"][0]["title"]
 			await play_music(ctx, False, [haha_eren_go, rumbling_rumbling])
 
