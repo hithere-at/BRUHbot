@@ -9,29 +9,35 @@ from discord.commands import slash_command, Option
 class RPSButton(discord.ui.View):
 
 	def __init__(self):
-		super().__init__()
+		super().__init__(timeout=8.0)
 		self.value = 0
+
+	async def close_inter(self):
+
+		for gonna_die in self.children:
+			gonna_die.style = discord.ButtonStyle.grey
+			gonna_die.disabled = True
 
 	@discord.ui.button(label="Rock", style=discord.ButtonStyle.grey)
 	async def rock(self, button: discord.ui.Button, inter: discord.Interaction):
 		self.value = 1
-		button.disabled = True
-		await inter.response.edit_message(view=self)
 		self.stop()
+		await self.close_inter()
+		await inter.response.edit_message(view=self)
 
 	@discord.ui.button(label="Paper", style=discord.ButtonStyle.green)
 	async def paper(self, button: discord.ui.Button, inter: discord.Interaction):
 		self.value = 2
-		button.disabled = True
-		await inter.response.edit_message(view=self)
 		self.stop()
+		await self.close_inter()
+		await inter.response.edit_message(view=self)
 
 	@discord.ui.button(label="Scissor", style=discord.ButtonStyle.red)
 	async def scissor(self, button: discord.ui.Button, inter: discord.Interaction):
 		self.value = 3
-		button.disabled = True
-		await inter.response.edit_message(view=self)
 		self.stop()
+		await self.close_inter()
+		await inter.response.edit_message(view=self)
 
 # Collection of "Game" commands
 class Game(commands.Cog):
@@ -55,6 +61,8 @@ class Game(commands.Cog):
 		# Optimized, credit goes to TechAndNews/Python-Scripts (GitHub)
 
 		if choices.value == 0:
+			await choices.close_inter()
+			await ctx.interaction.edit_original_message(view=choices)
 			await ctx.respond("Timeout")
 
 		elif choices.value == enemy:

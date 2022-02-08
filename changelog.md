@@ -51,3 +51,6 @@ Welcome to the biggest update of BRUHbot, Application commands update. [py-cord]
 
 ## Ver 2.3.0
 `obfs` and `deobfs` command update is reverted. i guess using `random` module is not a great idea lol. Oh yeah, this update also comes with music commands, you can play some songs with it. Also we improved `feedback` and `gdlevelrate` command. This update is also the most boring one to code.
+
+## Ver 2.3.0e1
+Experimental build of BRUHbot. Trying to play music by downloading song. If the result is not what we hope, we will revert the changes to streaming
