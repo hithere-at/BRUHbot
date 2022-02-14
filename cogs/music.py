@@ -1,24 +1,12 @@
 import discord
+import secrets
 import os
-import asyncio
 from yt_dlp import YoutubeDL as ytdl
 from youtube_search import YoutubeSearch as ytsearch
 from discord.ext import commands
 from discord.commands import slash_command, Option, SlashCommandGroup
 
 ffm_opts = {"options": "-vn -ab 128k"}
-server_queue = {}
-
-async def play_next_queue(ctx):
-
-	try:
-		del(server_queue[ctx.guild.id][0])
-
-		if len(server_queue[ctx.guild.id]) >= 1:
-			await play_music(ctx, True, server_queue[ctx.guild.id][0])
-
-	except IndexError:
-		await ctx.respond("Queue has been burned")
 
 async def get_ytdl_inf(ytdl_opts: dict, content: str) -> dict:
 	komi_best_girl = asyncio.get_running_loop()
@@ -28,27 +16,60 @@ async def get_ytsearch_res(query: str, max: int) -> list:
 	baby_eren = asyncio.get_running_loop()
 	return await baby_eren.run_in_executor(None, lambda: ytsearch(query, max_results=max).to_dict())
 
-async def play_music(ctx, from_queue: bool, inf: list):
+async def play_music(ctx, sauce: str):
+	player = discord.FFmpegPCMAudio(source=sauce, **ffm_opts)
+	ctx.guild.voice_client.play(player)
+	os.remove(sauce)
 
-	player = discord.FFmpegPCMAudio(source=inf[0], **ffm_opts)
+class Controller(discord.ui.View):
 
-	if from_queue is True:
-		gonna_burn_to_ashes = asyncio.get_running_loop()
-		ctx.guild.voice_client.play(player, after=lambda x: asyncio.run_coroutine_threadsafe(play_next_queue(ctx), gonna_burn_to_ashes))
-		await ctx.respond(f"Now playing **{inf[1]}** from your queue")
+	def __init__(self):
+		super().__init__(timeout=None)
 
-	elif from_queue is False:
-		ctx.guild.voice_client.play(player)
-		await ctx.respond(f"Now playing **{inf[1]}**")
+	async def wait_until_finished(self, msg: str, inter: discord.Interaction):
+		hanagaki = False
+		takemichi = inter.guild.voice_client
 
-	os.remove(inf[0])
+		while hanagaki == False:
+			await asyncio.sleep(1.25)
+			if takemichi.is_playing() or takemichi.is_paused(): continue
+
+			if not takemichi.is_playing():
+				await self.fuck_interaction()
+				await inter.edit_original_message(content=msg, view=self)
+				hanagaki = True
+
+	async def fuck_interaction(self):
+
+		for gonna_kill in self.children:
+			gonna_kill.disabled = True
+			gonna_kill.style = discord.ButtonStyle.grey
+
+	@discord.ui.button(label="Stop", style=discord.ButtonStyle.red, custom_id="persistent_view:red")
+	async def stop(self, button: discord.ui.Button, inter: discord.Interaction):
+
+		if inter.guild.voice_client.is_playing():
+			inter.guild.voice_client.stop()
+			await self.fuck_interaction()
+			await inter.response.edit_message(view=self)
+
+	@discord.ui.button(label="Pause", style=discord.ButtonStyle.green, custom_id="persistent_view:green")
+	async def pause_resume(self, button: discord.ui.Button, inter: discord.Interaction):
+
+		if inter.guild.voice_client.is_playing():
+			inter.guild.voice_client.pause()
+			button.label = "Resume"
+			return await inter.response.edit_message(view=self)
+
+		elif inter.guild.voice_client.is_paused():
+			inter.guild.voice_client.resume()
+			button.label = "Pause"
+			await inter.response.edit_message(view=self)
 
 class Music(commands.Cog):
 
 	def __init__(self, bot):
 		self.bot = bot
-
-	queue_stuff = SlashCommandGroup("queue", "Queueing System")
 
 	@slash_command(description="Bot join channel")
 	async def join(self, ctx):
@@ -57,9 +78,10 @@ class Music(commands.Cog):
 
 		if ctx.author.voice is None: return await ctx.respond("You're not in a voice channel ._.")
 
+		await ctx.respond("Joining")
 		channel = ctx.author.voice.channel
 		await channel.connect()
-		await ctx.respond("Joined")
+		await ctx.interaction.edit_original_message(content="Joined")
 
 	@slash_command(description="Bot leave channel")
 	async def leave(self, ctx):
@@ -70,103 +92,13 @@ class Music(commands.Cog):
 		await vcclient.disconnect()
 		await ctx.respond("Left")
 
-	@queue_stuff.command(description="Add song to the queue")
-	async def add(self, ctx, *, content: Option(str, "Contebt to be added")):
-
-		await ctx.defer()
-
-		rengoku_died_lol = f"song/{ctx.guild.id}-{ctx.author.id}"
-		ytdl_opts = {"format": "bestaudio/best", "noplaylist": True, "outtmpl": f"{rengoku_died_lol}-%(id)s.%(ext)s", "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "opus", "preferredquality": "128"}]}
-
-		if server_queue.get(ctx.guild.id) is None:
-			server_queue[ctx.guild.id] = []
-
-		junk = await get_ytdl_inf(ytdl_opts, content)
-		hinokami = f"{rengoku_died_lol}-{junk['entries'][0]['id']}.m4a"
-		kagura = junk["entries"][0]["title"]
-
-		server_queue[ctx.guild.id].append([hinokami, kagura])
-
-		if "https://" or "http://" in content:
-			await ctx.respond(f"Song added to server queue\nQuery: **<{content}>**")
-
-		else:
-			await ctx.respond(f"Song added to server queue\nQuery: **{content}**")
-
-	@queue_stuff.command(description="Remove song on the queue with specifed index")
-	async def remove(self, ctx, index: Option(int, "The index of the queue to be removed")):
-
-		if server_queue.get(ctx.guild.id) is None:
-			await ctx.respond("this server doesnt have any queue")
-
-		if index == 0:
-			await ctx.respond("Index cannot be 0")
-
-		if len(server_queue[ctx.guild.id]) < 1:
-			await ctx.respond("the queue is empty lol")
-
-		else:
-			await ctx.respond(f"Index {index} has been deleted\nSong title: **{server_queue[ctx.guild.id][index-1][1]}**")
-			del(server_queue[ctx.guild.id][index-1])
-
-	@queue_stuff.command(description="Wipe out all queued songs")
-	async def clear(self, ctx):
-
-		if len(server_queue[ctx.guild.id]) < 1:
-			return await ctx.respond("this server doesnt even have a queue")
-
-		server_queue[ctx.guild.id].clear()
-		await ctx.respond("This server queue has been cleared")
-
-	@queue_stuff.command(description="View all queued songs")
-	async def view(self, ctx):
-
-		pretty = ""
-
-		if server_queue.get(ctx.guild.id) is None:
-			return await ctx.respond("stop. there is no queue")
-
-		if len(server_queue[ctx.guild.id]) == 0:
-			await ctx.respond("Nothing to see, because your queue is empty")
-
-		else:
-
-			for idx, val in enumerate(server_queue[ctx.guild.id], 1):
-
-				if "https://" in val[1]:
-					pretty += f"Index {idx}: <{val[1]}>\n"
-
-				else:
-					pretty += f"Index {idx}: **{val[1]}**\n"
-
-			await ctx.respond(pretty)
-
-	@queue_stuff.command(description="Play song fron the queue")
-	async def play(self, ctx):
-
-		if server_queue.get(ctx.guild.id) is None:
-			return await ctx.respond("theres no queue hence no song to be played")
-
-		await ctx.defer()
-
-		if ctx.author.voice is None: return await ctx.respond("You're not in a voice channel ._.")
-
-		vc = ctx.guild.voice_client
-
-		if vc not in self.bot.voice_clients: return await ctx.respond("im not in your voice channel")
-
-		if not vc.is_playing():
-			await play_music(ctx, True, server_queue[ctx.guild.id][0])
-
-		else:
-			await ctx.respond("Already playing song")
-
 	@slash_command(description="Play song with the specified url or query")
 	async def play(self, ctx, *, content: Option(str, "Content of the URL or query")):
 
 		await ctx.defer()
 
-		rengoku_died_lol = f"song/{ctx.guild.id}-{ctx.author.id}"
+		what_a_mess = secrets.token_urlsafe(10)
+		rengoku_died_lol = f"song/{what_a_mess}"
 
 		if ctx.author.voice is None: return await ctx.respond("You're not in a voice channel ._.")
 
@@ -176,14 +108,19 @@ class Music(commands.Cog):
 
 		if not vc.is_playing():
 			ytdl_opts = {"format": "m4a", "noplaylist": True, "outtmpl": f"{rengoku_died_lol}-%(id)s.%(ext)s"}
-			# ytdl_opts = {"format": "bestaudio/best", "noplaylist": True, "outtmpl": f"{rengoku_died_lol}-%(id)s.%(ext)s", "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "opus", "preferredquality": "128"}]}
 			beware = await get_ytdl_inf(ytdl_opts, content)
 			haha_eren_go = f"{rengoku_died_lol}-{beware['entries'][0]['id']}.m4a"
 			rumbling_rumbling = beware["entries"][0]["title"]
-			await play_music(ctx, False, [haha_eren_go, rumbling_rumbling])
+
+			await play_music(ctx, haha_eren_go)
 
 		else:
-			await ctx.respond("Already playing song")
+			return await ctx.respond("Already playing song")
+
+		the_paths = Controller()
+
+		await ctx.respond(f"Now playing **{rumbling_rumbling}**", view=the_paths)
+		await the_paths.wait_until_finished(f"Finished playing **{rumbling_rumbling}**", ctx.interaction)
 
 	@slash_command(description="Search video on YouTube and get the URL")
 	async def ytsearch(self, ctx, max_result: Option(int, "Max result of the search result"), *, query: Option(str, "Keywords to be search")):
@@ -197,54 +134,6 @@ class Music(commands.Cog):
 			zenitsu_op += f"Index {kamado}:\nTitle: **{tanjiro['title']}**\nURL: <https://youtu.be/{tanjiro['id']}>\nChannel: **{tanjiro['channel']}**\n\n"
 
 		await ctx.respond(zenitsu_op)
-
-	@slash_command(description="Pause song")
-	async def pause(self, ctx):
-
-		if ctx.author.voice is None: return await ctx.respond("You're not in a voice channel ._.")
-
-		vc = ctx.guild.voice_client
-
-		if vc not in self.bot.voice_clients: return await ("im not in your voice channel")
-
-		if vc.is_playing():
-			vc.pause()
-			await ctx.respond("Paused")
-
-		else:
-			await ctx.respond("Pausing what? There is no song playing right now xd")
-
-	@slash_command(description="Stop playing current song (also works with queue by skipping)")
-	async def stop(self, ctx):
-
-		if ctx.author.voice is None: return await ctx.respond("You're not in a voice channel ._.")
-
-		vc = ctx.guild.voice_client
-
-		if vc not in self.bot.voice_clients: return await ("im not in your voice channel")
-
-		if vc.is_playing():
-			vc.stop()
-			await ctx.respond("Stopped")
-
-		else:
-			await ctx.respond("There is no song to be stopped")
-
-	@slash_command(description="Resume/unpause paused song")
-	async def resume(self, ctx):
-
-		if ctx.author.voice is None: return await ctx.respond("You're not in a voice channel ._.")
-
-		vc = ctx.guild.voice_client
-
-		if vc not in self.bot.voice_clients: return await ("im not in your voice channel")
-
-		if vc.is_paused():
-			vc.resume()
-			await ctx.respond("Resumed")
-
-		else:
-			await ctx.respond("There is no song playing or the song isnt paused")
 
 def setup(bot):
 	bot.add_cog(Music(bot))

@@ -1,13 +1,20 @@
 import discord
+import aiohttp
 import gd
 import os
+import asyncio
+from bs4 import BeautifulSoup
 from discord.ext import commands
 from discord.commands import slash_command,	Option
 from github import Github
+import dns.resolver
 import random # random module for randomizing
 
-git_user = Github(os.getenv("GITHUB_TOKEN"))
+dns.resolver.default_resolver=dns.resolver.Resolver(configure=False)
+dns.resolver.default_resolver.nameservers=['8.8.8.8']
+
 gd_client = gd.Client()
+git_user = Github(os.getenv("GITHUB_TOKEN"))
 
 class NormalStuff(commands.Cog):
 
@@ -206,13 +213,43 @@ class NormalStuff(commands.Cog):
 			await ctx.respond(f'You are **{im_you}% {random.choice(barney)}**')
 
 	@slash_command(description="Ask the bot a question")
-	async def ask(self, ctx, *, question: str):
+	async def ask(self, ctx, custom_response: Option(str, "Custom response (use '|' to separate answer)"), *, question: str):
 
-		gordon = ['yes',
-			'wth no',
-			'maybe',
-			'idk']
+		print(custom_response)
+
+		if custom_response == "None":
+			gordon = ['yes',
+				'wth no',
+				'maybe',
+				'idk']
+		else:
+			gordon = custom_response.split('|')
+
 		await ctx.respond(f'Q: {question}\nA: {random.choice(gordon)}')
+
+	@slash_command(description="Define the meaning of a specified keyword")
+	async def define(self, ctx, *, keywords: Option(str, "The keywords to be defined (If the keywords has 2 words, only the last one will be searched)")):
+
+		await ctx.defer()
+
+		user = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36 RuxitSynthetic/1.0 v4561653522394685841 t8837378180780974251 ath2653ab72 altpriv cvcv=2 smf=0 svfu=1"}
+		are_you = keywords.split()
+
+		async with aiohttp.ClientSession(headers=user) as ready:
+			async with ready.get(f"https://dictionary.cambridge.org/dictionary/english/{are_you[len(are_you)-1]}") as to_rumble:
+
+				if to_rumble.status == 200:
+					yes_iam = BeautifulSoup(await to_rumble.text(), "html.parser")
+					the_content = yes_iam.find_all("meta")[2].get("content")
+
+					if the_content == "The most popular dictionary and thesaurus. Meanings & definitions of words in English with examples, synonyms, pronunciations and translations.": return await ctx.respond("No result found")
+
+					iam_asimp = the_content.replace(f"{are_you[len(are_you)-1]} definition: ", "").replace("…", "").replace(". Learn more.", "").split(": ")
+
+					await ctx.respond(iam_asimp[0].replace("1. ", ""))
+
+				else:
+					return await ctx.respond(f"An error has occured when searching definition\nStatus code: {to_rumble.status}")
 
 	@slash_command(description="Rate your GD level (no this is just a joke)")
 	async def gdlevelrate(self, ctx, level_id: Option(int, "Level ID to be rated")):

@@ -56,7 +56,6 @@ class Game(commands.Cog):
 
 		await ctx.respond("Welcome to rock paper scissor, please choose one the following choices\n1. Rock\n2. Paper\n3. Scissor\nYou have 8 seconds to choose", view=choices)
 		await choices.wait()
-
 		# Is there a better way to check if the player win, i hope someone optimize this (it was a gigantic elif statements)
 		# Optimized, credit goes to TechAndNews/Python-Scripts (GitHub)
 
@@ -91,15 +90,13 @@ class Game(commands.Cog):
 			guess = await self.bot.wait_for("message", check=checker, timeout=15)
 
 		except asyncio.TimeoutError:
-			await ctx.respond("Timeout. Quitting...")
-			return
+			return await ctx.respond("Timeout. Quitting...")
 
 		try:
 			temp = int(guess.content)
 
 		except ValueError:
-			await ctx.respond("In number, not in words. Quitting")
-			return
+			return await ctx.respond("In number, not in words. Quitting")
 
 		if temp == num:
 			await ctx.respond("You are right")
