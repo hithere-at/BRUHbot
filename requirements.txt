@@ -1,12 +1,6 @@
 py-cord==2.0.0b4
 PyNacl
 PyGithub
-click
-enums.py
-html5lib
-iters.py
-pefile
-tqdm
 typing_extensions
 youtube-search
 beautifulsoup4

@@ -1,6 +1,5 @@
 import discord
 import aiohttp
-import gd
 import os
 import asyncio
 from bs4 import BeautifulSoup
@@ -13,7 +12,6 @@ import random # random module for randomizing
 dns.resolver.default_resolver=dns.resolver.Resolver(configure=False)
 dns.resolver.default_resolver.nameservers=['8.8.8.8']
 
-gd_client = gd.Client()
 git_user = Github(os.getenv("GITHUB_TOKEN"))
 
 class NormalStuff(commands.Cog):
@@ -250,29 +248,6 @@ class NormalStuff(commands.Cog):
 
 				else:
 					return await ctx.respond(f"An error has occured when searching definition\nStatus code: {to_rumble.status}")
-
-	@slash_command(description="Rate your GD level (no this is just a joke)")
-	async def gdlevelrate(self, ctx, level_id: Option(int, "Level ID to be rated")):
-
-		try:
-			level = await gd_client.get_level(level_id)
-
-		except gd.MissingAccess:
-			return await ctx.respond("An error has occured when finding level")
-
-		rate_response = {0: "✩0: You're a shy person",
-						1: '★1 (Auto): You like to make auto level ? weird... but ok',
-						2: '★2 (Easy): I bet its your first time making this level',
-						3: '★3 (Normal): You probably like to play HOW by spu7nix',
-						4: '★4 (Hard): I hope your level get featured mate',
-						5: '★5 (Hard): You like to make a level that make people grinding stars an easy life',
-						6: '★6 (Harder): To the person who like to make this kind of level, i like you. you make my grind less painful',
-						7: '★7 (Harder): Your level is kinda hard, y\'know ?',
-						8: '★8 (Insane): You have annoying gameplay, i swear...',
-						9: '★9 (Insane): Your level is basically failed demon',
-						10: '★10 (Demon): Hope you make it to the weekly demon :)'}
-
-		await ctx.respond(f'Level name: **{level.name}**\nLevel creator: **{level.creator}**\nLevel ID: **{level_id}**\n\n{rate_response[level.requested_stars]}')
 
 	@slash_command(description="Give you whale facts")
 	async def aboutwhale(self, ctx):
