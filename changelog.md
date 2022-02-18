@@ -54,3 +54,9 @@ Welcome to the biggest update of BRUHbot, Application commands update. [py-cord]
 
 ## Ver 2.3.0e1
 Experimental build of BRUHbot. Trying to play music by downloading song. If the result is not what we hope, we will revert the changes to streaming
+
+## Ver 2.3.1
+Just a little update, a new command, `define`. `define` will well, define the meaning of the keyword argument that you give to the command. We also delete queue system because its an unstable piece of junk that full of errors and bugs. Also, we updated `ask` command. Check it out by yourself.
+
+## Ver 2.4.0
+This update is idk, a lot of new media category commands and a new category, which is `anime`. There is two command for the new category, `anime seatch` and `anime describe`. Honestly yeah thats it. I dont have anything to say anymore.

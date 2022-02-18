@@ -108,5 +108,60 @@ class media(commands.Cog):
 
 		await ctx.respond(random.choice(fumos_boi))
 
+	@slash_command(description="The skeleton appears")
+	async def skeleton(self, ctx):
+
+		skull = ["https://tenor.com/view/fart-memes-i-farted-skeleton-gif-24093226",
+				"https://tenor.com/view/the-skeleton-appears-theskeleton-theskeletonappears-gif-24753701",
+				"https://tenor.com/view/pablo-escobar-gif-22308826",
+				"https://tenor.com/view/skeleton-dancing-skeleton-skeleton-dancing-mental-mental-health-gif-22285576"]
+
+		await ctx.respond(random.choice(skull))
+
+	@slash_command(description="Flavored doorknob testing facility")
+	async def doorknob(self, ctx):
+
+		await ctx.respond("https://cdn.discordapp.com/attachments/529475315953696770/876700584227508234/caption.gif")
+
+	@slash_command(description="A man and a TV")
+	async def tvmp4(self, ctx):
+
+		await ctx.respond("https://cdn.discordapp.com/attachments/741920768388104272/943121237658435624/TV.mp4")
+
+	@slash_command(description="willi in a bike")
+	async def willi(self, ctx):
+
+		await ctx.respond("https://cdn.discordapp.com/attachments/741920768388104272/943121935640977408/willi.mp4")
+
+	@slash_command(description="dudes get bonked in a truck")
+	async def truck(self, ctx):
+
+		await ctx.respond("https://cdn.discordapp.com/attachments/741920768388104272/943122194584711189/truck.mp4")
+
+	@slash_command(description="Welcome to EPIC RAP BATTLE HISTORY")
+	async def rapbattlehistory(self, ctx):
+
+		await ctx.respond("https://cdn.discordapp.com/attachments/741920768388104272/943122686811459614/EMINEM_VS_IBS.mp4")
+
+	@slash_command(description="Im a gamer")
+	async def gamer(self, ctx):
+
+		await ctx.respond("https://cdn.discordapp.com/attachments/741920768388104272/943122992316174356/gamer.jpg")
+
+	@slash_command(description="lagh.mp4")
+	async def lagh(self, ctx):
+
+		await ctx.respond("https://cdn.discordapp.com/attachments/741920768388104272/943123134838624286/LAGH.mp4")
+
+	@slash_command(description="Watermelon taste good when you sleep")
+	async def watermelon(self, ctx):
+
+		await ctx.respond("https://cdn.discordapp.com/attachments/741920768388104272/943126605679722496/hmmmmm.mp4")
+
+	@slash_command(description="Sauce ?")
+	async def sauce(self, ctx):
+
+		await ctx.respond("https://cdn.discordapp.com/attachments/901972458914062457/943037052268716042/video0.mov")
+
 def setup(bot):
 	bot.add_cog(media(bot))
