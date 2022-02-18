@@ -60,3 +60,6 @@ Just a little update, a new command, `define`. `define` will well, define the me
 
 ## Ver 2.4.0
 This update is idk, a lot of new media category commands and a new category, which is `anime`. There is two command for the new category, `anime search` and `anime describe`. Honestly yeah thats it. I dont have anything to say anymore.
+
+## Ver 2.4.1
+Deleting `gdlevelrate` command because of gd dependencies. gd module crash everything.
