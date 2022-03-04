@@ -1,6 +1,7 @@
 import discord
 import secrets
 import os
+import asyncio
 from yt_dlp import YoutubeDL as ytdl
 from youtube_search import YoutubeSearch as ytsearch
 from discord.ext import commands
