@@ -63,3 +63,6 @@ This update is idk, a lot of new media category commands and a new category, whi
 
 ## Ver 2.4.1
 Deleting `gdlevelrate` command because of gd dependencies. gd module crash everything.
+
+## Ver 2.4.2
+Improvements to music command, specifically `play` command. It was broken before, and i just noticed it today at the time this was written ._.

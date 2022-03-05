@@ -10,8 +10,8 @@ from discord.commands import slash_command, Option, SlashCommandGroup
 ffm_opts = {"options": "-vn -ab 128k"}
 
 async def get_ytdl_inf(ytdl_opts: dict, content: str) -> dict:
-	komi_best_girl = asyncio.get_running_loop()
-	return await komi_best_girl.run_in_executor(None, lambda: ytdl(ytdl_opts).extract_info(f'ytsearch:{content}', download=True))
+	kaede_best_girl = asyncio.get_running_loop()
+	return await kaede_best_girl.run_in_executor(None, lambda: ytdl(ytdl_opts).extract_info(f'ytsearch:{content}', download=True))
 
 async def get_ytsearch_res(query: str, max: int) -> list:
 	baby_eren = asyncio.get_running_loop()
@@ -20,14 +20,13 @@ async def get_ytsearch_res(query: str, max: int) -> list:
 async def play_music(ctx, sauce: str):
 	player = discord.FFmpegPCMAudio(source=sauce, **ffm_opts)
 	ctx.guild.voice_client.play(player)
-	os.remove(sauce)
 
 class Controller(discord.ui.View):
 
 	def __init__(self):
-		super().__init__(timeout=None)
+			super().__init__(timeout=None)
 
-	async def wait_until_finished(self, msg: str, inter: discord.Interaction):
+	async def wait_until_finished(self, msg: str, src_file: str, inter: discord.Interaction):
 		hanagaki = False
 		takemichi = inter.guild.voice_client
 
@@ -37,6 +36,7 @@ class Controller(discord.ui.View):
 
 			if not takemichi.is_playing():
 				await self.fuck_interaction()
+				os.remove(src_file)
 				await inter.edit_original_message(content=msg, view=self)
 				hanagaki = True
 
@@ -121,7 +121,7 @@ class Music(commands.Cog):
 		the_paths = Controller()
 
 		await ctx.respond(f"Now playing **{rumbling_rumbling}**", view=the_paths)
-		await the_paths.wait_until_finished(f"Finished playing **{rumbling_rumbling}**", ctx.interaction)
+		await the_paths.wait_until_finished(f"Finished playing **{rumbling_rumbling}**", haha_eren_go, ctx.interaction)
 
 	@slash_command(description="Search video on YouTube and get the URL")
 	async def ytsearch(self, ctx, max_result: Option(int, "Max result of the search result"), *, query: Option(str, "Keywords to be search")):
