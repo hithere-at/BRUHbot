@@ -302,5 +302,10 @@ class NormalStuff(commands.Cog):
 		bot_repo.create_issue(title=f"{type} from {ctx.author.name}", body=content)
 		await ctx.respond("Sent!")
 
+	@slash_command(description="Source code link")
+	async def sourcecd(self, ctx):
+
+		await ctx.respond("https://github.com/hithere-xd/BRUHbot")
+
 def setup(bot):
 	bot.add_cog(NormalStuff(bot))

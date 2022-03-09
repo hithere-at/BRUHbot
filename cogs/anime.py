@@ -1,3 +1,4 @@
+import re
 import discord
 import aiohttp
 import asyncio
